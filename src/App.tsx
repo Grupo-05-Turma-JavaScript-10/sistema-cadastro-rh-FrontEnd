@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Sidebar } from './components/sidebar/Sidebar';
 import { Dashboard } from './pages/Dashboard';
+import { Cargos } from './pages/Cargos';
 
 function App() {
   return (
@@ -13,6 +14,8 @@ function App() {
           <Routes>
             
             <Route path="/dashboard" element={<Dashboard />} />
+
+            <Route path="/cargos" element={<Cargos />} />
 
             <Route path="/colaboradores" element={
               <div>
