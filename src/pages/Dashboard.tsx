@@ -61,7 +61,6 @@ export function Dashboard() {
             {dashboardData.activities.map((activity) => (
               <li key={activity.id} className="flex items-start justify-between border-b border-gray-50 pb-2">
                 <div className="flex items-start gap-3">
-                  {/* Cor dinâmica vinda dos dados */}
                   <div className={`mt-1.5 w-2 h-2 rounded-full ${activity.color} shadow-sm`}></div>
                   <div>
                     <p className="text-sm font-bold text-corporate-slate">
@@ -78,26 +77,26 @@ export function Dashboard() {
         </Card>
 
         <Card className="h-full">
-          <h3 className="font-bold text-lg text-corporate-slate mb-6">Resumo Rápido</h3>
-          <div className="space-y-4">
-            
-            <div className="bg-primary-teal/10 p-5 rounded-lg border-l-4 border-primary-teal flex justify-between items-center">
-              <span className="text-primary-teal font-bold text-sm">Colaboradores Ativos</span>
-              <p className="text-2xl font-bold text-corporate-slate">235</p>
-            </div>
+  <h3 className="font-bold text-lg text-corporate-slate mb-6">Resumo Rápido</h3>
+  <div className="space-y-4">
+    
+    <div className="bg-primary-teal/10 p-5 rounded-lg border-l-4 border-primary-teal flex justify-between items-center transition-transform duration-300 hover:translate-x-1 cursor-default hover:shadow-sm">
+      <span className="text-primary-teal font-bold text-sm">Colaboradores Ativos</span>
+      <p className="text-2xl font-bold text-corporate-slate">235</p>
+    </div>
 
-            <div className="bg-error-red/10 p-5 rounded-lg border-l-4 border-error-red flex justify-between items-center">
-              <span className="text-error-red font-bold text-sm">Colaboradores Inativos</span>
-              <p className="text-2xl font-bold text-corporate-slate">12</p>
-            </div>
+    <div className="bg-error-red/10 p-5 rounded-lg border-l-4 border-error-red flex justify-between items-center transition-transform duration-300 hover:translate-x-1 cursor-default hover:shadow-sm">
+      <span className="text-error-red font-bold text-sm">Colaboradores Inativos</span>
+      <p className="text-2xl font-bold text-corporate-slate">12</p>
+    </div>
 
-             <div className="bg-gray-100 p-5 rounded-lg border-l-4 border-metallic-silver flex justify-between items-center">
-              <span className="text-metallic-silver font-bold text-sm">Usuários do Sistema</span>
-              <p className="text-2xl font-bold text-corporate-slate">8</p>
-            </div>
+    <div className="bg-gray-100 p-5 rounded-lg border-l-4 border-metallic-silver flex justify-between items-center transition-transform duration-300 hover:translate-x-1 cursor-default hover:shadow-sm">
+      <span className="text-metallic-silver font-bold text-sm">Usuários do Sistema</span>
+      <p className="text-2xl font-bold text-corporate-slate">8</p>
+    </div>
 
-          </div>
-        </Card>
+  </div>
+</Card>
 
       </div>
     </div>
