@@ -1,31 +1,22 @@
 export function Hero() {
-  const bgImageUrl = "https://ik.imagekit.io/k6kki72wv/background-colab";
+  const bgImageUrl = "https://ik.imagekit.io/k6kki72wv/background-fhd";
 
   return (
-    <section className="relative min-h-screen bg-corporate-slate overflow-hidden flex items-center pt-20 lg:pt-0">
+    <section className="relative min-h-screen overflow-hidden flex items-center pt-32 pb-12 lg:pt-40">
       <div
         className="absolute inset-0 z-0"
         style={{
           backgroundImage: `url("${bgImageUrl}")`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          opacity: "0.2",
         }}
-      ></div>
-
-      <div
-        className="absolute inset-0 opacity-10 pointer-events-none z-1"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='40' viewBox='0 0 80 40'%3E%3Cpath d='M0 40 L40 0 L80 40 Z' fill='%23ffffff'/%3E%3C/svg%3E")`,
-          backgroundSize: "80px 40px",
-        }}
-      ></div>
-
-      <div className="absolute -left-24 top-1/4 w-96 h-96 bg-primary-teal/10 blur-[120px] rounded-full z-1"></div>
+      >
+        <div className="absolute inset-0 bg-black/30"></div>
+      </div>
 
       <div className="container mx-auto px-4 md:px-8 flex flex-col lg:flex-row items-center gap-12 lg:gap-20 relative z-10">
         <div className="flex-1 text-left">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] tracking-tight mb-8">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.1] tracking-tight mb-6">
             Centralize e <br />
             <span className="text-white">Simplifique a Gestão</span> <br />
             do seu RH com o <br />
@@ -34,16 +25,16 @@ export function Hero() {
             </span>
           </h1>
 
-          <p className="text-metallic-silver text-lg md:text-xl font-medium max-w-xl mb-10 leading-relaxed">
+          <p className="text-white text-base md:text-lg font-medium max-w-xl mb-10 leading-relaxed opacity-90">
             Sistema desenvolvido para organizar as informações dos
             colaboradores, estruturar cargos e controlar acessos em um só lugar.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <button className="bg-primary-teal text-white px-10 py-4 rounded-xl font-bold text-lg hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-primary-teal/20">
+            <button className="bg-primary-teal text-white px-8 py-3.5 rounded-xl font-bold text-base hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-primary-teal/20">
               Começar Agora
             </button>
-            <button className="bg-white/5 border border-white/10 text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-white/10 transition-all">
+            <button className="bg-white/10 border border-white/20 text-white backdrop-blur-md px-8 py-3.5 rounded-xl font-bold text-base hover:bg-white/20 transition-all">
               Ver Demo
             </button>
           </div>
@@ -71,8 +62,8 @@ export function Hero() {
               <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-white/20 to-transparent"></div>
             </div>
 
-            <div className="absolute -bottom-6 -right-6 bg-primary-teal w-20 h-20 rounded-2xl flex items-center justify-center shadow-2xl animate-bounce duration-3000">
-              <div className="w-8 h-8 border-4 border-white rounded-xs transform rotate-45" />
+            <div className="absolute -bottom-6 -right-6 bg-primary-teal w-16 h-16 rounded-2xl flex items-center justify-center shadow-2xl animate-pulse">
+              <div className="w-6 h-6 border-4 border-white rounded-[2px] transform rotate-45" />
             </div>
           </div>
         </div>
