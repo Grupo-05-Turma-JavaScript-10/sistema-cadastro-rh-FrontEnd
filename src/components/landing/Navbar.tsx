@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MenuIcon, XIcon, HexagonIcon } from "lucide-react"; 
+import { MenuIcon, XIcon } from "lucide-react"; 
 import { Button } from "../ui/Button"; 
 
 export function Navbar() {
@@ -16,12 +16,14 @@ export function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
       <div className="container mx-auto px-4 md:px-8 h-20 flex items-center justify-between">
         
-        <div className="flex items-center gap-2 cursor-pointer">
-          <div className="bg-primary-teal p-1.5 rounded-lg text-white">
-
-             <HexagonIcon fill="currentColor" size={24} />
+        <div className="flex items-center gap-2 cursor-pointer hover:opacity-90 transition-opacity">
+          <div className="bg-primary-teal w-8 h-8 rounded-lg flex items-center justify-center shadow-sm">
+             <div className="w-3.5 h-3.5 border-2 border-white rounded-[1px] transform rotate-45" />
           </div>
-          <span className="text-xl font-bold text-corporate-slate tracking-tight">Colab+</span>
+          
+          <span className="text-xl font-bold text-corporate-slate tracking-tight">
+            Colab<span className="text-primary-teal">+</span>
+          </span>
         </div>
 
         <div className="hidden md:flex items-center gap-8">
