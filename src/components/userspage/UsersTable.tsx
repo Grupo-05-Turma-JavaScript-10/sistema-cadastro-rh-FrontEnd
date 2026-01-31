@@ -32,20 +32,7 @@ function UsersTable({ workers, onEdit, onDelete }: UsersTableProps) {
     };
   };
 
-  const renderStatus = (status: boolean) => {
-    return (
-      <span
-        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
-          ${status
-            ? "text-[var(--color-success-green)] bg-[var(--color-success-green)]/10"
-            : "text-[var(--color-error-red)] bg-[var(--color-error-red)]/10"
-          }
-        `}
-      >
-        {status ? "Ativo" : "Inativo"}
-      </span>
-    );
-  };
+
 
   return (
     <div>
@@ -72,7 +59,9 @@ function UsersTable({ workers, onEdit, onDelete }: UsersTableProps) {
 
               <div className="flex items-center gap-2 text-sm bg-gray-50 p-2 rounded-md">
                 <ShieldIcon size={16} className="text-metallic-silver" />
-                {renderStatus(worker.status)}
+               <Badge variant={worker.status ? "success" : "danger"}>
+                  {worker.status ? "Ativo" : "Inativo"}
+                </Badge>
               </div>
 
               <div className="flex items-center gap-2 pt-2 border-t border-gray-50 mt-1">
@@ -133,7 +122,9 @@ function UsersTable({ workers, onEdit, onDelete }: UsersTableProps) {
                       </td>
 
                       <td className="p-4">
-                        {renderStatus(worker.status)}
+                        <Badge variant={worker.status ? "success" : "danger"}>
+                          {worker.status ? "Ativo" : "Inativo"}
+                        </Badge>
                       </td>
 
                       <td className="p-4 text-right pr-6">
