@@ -4,6 +4,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { Cargos } from "./pages/Cargos";
 import { LandingPage } from "./pages/LandingPage";
 import { Footer } from "./components/landing/Footer";
+import UsersPage from "./pages/Users";
 
 
 function Layout() {
@@ -16,16 +17,16 @@ function Layout() {
         {!isPublicPage && <Sidebar />}
 
         <div
-          className={`flex-1 transition-all duration-300 ${
-            !isPublicPage
+          className={`flex-1 transition-all duration-300 ${!isPublicPage
               ? "ml-0 md:ml-64 p-4 md:p-8 pt-16 md:pt-8"
               : "flex flex-col"
-          }`}
+            }`}
         >
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/cargos" element={<Cargos />} />
+            <Route path="/usuarios" element={<UsersPage />} />
 
             <Route
               path="/colaboradores"

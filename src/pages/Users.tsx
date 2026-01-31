@@ -6,7 +6,7 @@ import type Worker from "../models/Worker";
 import { Button } from "../components/ui/Button";
 import { StatCard } from "../components/ui/StatCard";
 
-function UsersPage() {
+function Users() {
     const [workers, setWorkers] = useState<Worker[]>([]);
 
     useEffect(() => {
@@ -122,4 +122,4 @@ function UsersPage() {
     );
 }
 
-export default UsersPage;
+export default Users;
