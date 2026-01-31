@@ -62,6 +62,10 @@ function UsersPage() {
         setWorkers(mockWorkers);
     }, []);
 
+    function handleNewUser() {
+        alert("Teste modal");
+    }
+
     return (
         <div className="space-y-6">
             <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -72,7 +76,7 @@ function UsersPage() {
                     </p>
                 </div>
 
-                <Button>
+                <Button onClick={handleNewUser}>
                     <Plus size={20} />
                     Novo Usuário
                 </Button>
