@@ -1,10 +1,10 @@
-import { Plus, Search } from "lucide-react";
+import { CheckCircle2Icon, Plus, Search, ShieldCheckIcon, UsersIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import StatCard from "./StatCard";
 import UsersTable from "./UsersTable";
 import PermissionLevels from "./PermissionsLevel";
 import type Worker from "../../models/Worker";
 import { Button } from "../ui/Button";
+import { StatCard } from "../ui/StatCard";
 
 function UsersPage() {
     const [workers, setWorkers] = useState<Worker[]>([]);
@@ -63,7 +63,7 @@ function UsersPage() {
     }, []);
 
     return (
-        <main className="p-6 space-y-6">
+        <div className="space-y-6">
             <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
                     <h1 className="text-2xl md:text-3xl font-bold text-corporate-slate">Usuários do Sistema</h1>
@@ -96,19 +96,25 @@ function UsersPage() {
             />
 
             <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                <StatCard label="Total de Usuários" value={workers.length} />
                 <StatCard
-                    label="Usuários Ativos"
-                    value={workers.filter(w => w.status).length}
-                    valueColor="text-success-green"
+                    title="Total de Usuários"
+                    value={workers.length}
+                    icon={UsersIcon}
                 />
                 <StatCard
-                    label="Administradores"
+                    title="Usuários Ativos"
+                    value={workers.filter(w => w.status).length}
+                    variant="success"
+                    icon={CheckCircle2Icon}
+                />
+                <StatCard
+                    title="Administradores"
                     value={workers.filter(w => w.usuario).length}
-                    valueColor="text-primary-teal"
+                    variant="brand"
+                    icon={ShieldCheckIcon}
                 />
             </section>
-        </main>
+        </div>
     );
 }
 
