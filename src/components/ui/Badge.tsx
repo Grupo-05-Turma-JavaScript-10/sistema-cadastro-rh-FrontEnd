@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
 
-export type BadgeVariant = "default" | "success" | "warning" | "neutral" | "brand";
+export type BadgeVariant = "default" | "success" | "warning" | "neutral" | "brand" | "danger";
 
 interface BadgeProps {
   children: ReactNode;
@@ -15,6 +15,7 @@ export function Badge({ children, variant = "default" }: BadgeProps) {
     warning: "bg-orange-100 text-orange-700",
     neutral: "bg-gray-100 text-metallic-silver", 
     brand: "bg-primary-teal/10 text-primary-teal",
+    danger: "bg-error-red/10 text-error-red",
   };
 
   return (

@@ -1,6 +1,6 @@
 import { Users, Briefcase, UserPlus, TrendingUp } from "lucide-react";
 import { Card } from "../components/ui/Card";
-import { StatCard } from "../components/dashboard/StatCard";
+import { StatCard } from "../components/ui/StatCard";
 
 export function Dashboard() {
   

@@ -5,6 +5,7 @@ import { Cargos } from "./pages/Cargos";
 import { LandingPage } from "./pages/LandingPage";
 import { Footer } from "./components/landing/Footer";
 
+
 function Layout() {
   const location = useLocation();
   const isPublicPage = location.pathname === "/";

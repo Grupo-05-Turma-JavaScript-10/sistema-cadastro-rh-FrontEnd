@@ -29,8 +29,8 @@ export function Cargos() {
   }
 
     return (
-        <div>
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+        <div className="space-y-6">
+            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
                 <div>
                     <h1 className="text-2xl md:text-3xl font-bold text-corporate-slate">Cargos & Estrutura</h1>
                     <p className="text-metallic-silver mt-1">Gerencie a estrutura organizacional</p>
@@ -40,7 +40,7 @@ export function Cargos() {
                     <Plus size={20} />
                     Novo Cargo
                 </Button>
-            </div>
+            </header>
 
             <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm mb-6 flex items-center gap-3">
                 <Search size={20} className="text-metallic-silver" />
