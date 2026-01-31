@@ -3,7 +3,7 @@ import { Sidebar } from './components/sidebar/Sidebar';
 import { Dashboard } from './pages/Dashboard';
 import { Cargos } from './pages/Cargos';
 import { LandingPage } from './pages/LandingPage';
-import UsersPage from './components/userspage/UsersPage';
+import Users from './pages/Users';
 
 function Layout() {
   const location = useLocation();
@@ -21,7 +21,7 @@ function Layout() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/cargos" element={<Cargos />} />
-          <Route path='/usuarios' element={<UsersPage />} />
+          <Route path='/usuarios' element={<Users />} />
 
           <Route path="/colaboradores" element={
             <div><h1>Em construção...</h1></div>

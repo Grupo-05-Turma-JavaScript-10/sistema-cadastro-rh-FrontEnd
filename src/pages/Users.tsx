@@ -1,10 +1,10 @@
 import { CheckCircle2Icon, Plus, Search, ShieldCheckIcon, UsersIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import UsersTable from "./UsersTable";
-import PermissionLevels from "./PermissionsLevel";
-import type Worker from "../../models/Worker";
-import { Button } from "../ui/Button";
-import { StatCard } from "../ui/StatCard";
+import UsersTable from "../components/users/UsersTable";
+import PermissionLevels from "../components/users/PermissionsLevel";
+import type Worker from "../models/Worker";
+import { Button } from "../components/ui/Button";
+import { StatCard } from "../components/ui/StatCard";
 
 function UsersPage() {
     const [workers, setWorkers] = useState<Worker[]>([]);
