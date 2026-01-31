@@ -66,8 +66,8 @@ function UsersPage() {
         <main className="p-6 space-y-6">
             <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
-                    <h1 className="text-2xl font-bold">Usuários do Sistema</h1>
-                    <p className="text-sm text-[var(--color-metallic-silver)]">
+                    <h1 className="text-2xl md:text-3xl font-bold text-corporate-slate">Usuários do Sistema</h1>
+                    <p className="text-sm text-metallic-silver">
                         Controle quem pode acessar e gerenciar o sistema
                     </p>
                 </div>
@@ -100,12 +100,12 @@ function UsersPage() {
                 <StatCard
                     label="Usuários Ativos"
                     value={workers.filter(w => w.status).length}
-                    valueColor="text-[var(--color-success-green)]"
+                    valueColor="text-success-green"
                 />
                 <StatCard
                     label="Administradores"
                     value={workers.filter(w => w.usuario).length}
-                    valueColor="text-[var(--color-primary-teal)]"
+                    valueColor="text-primary-teal"
                 />
             </section>
         </main>
