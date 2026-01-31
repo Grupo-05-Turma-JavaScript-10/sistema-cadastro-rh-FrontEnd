@@ -18,7 +18,7 @@ export const criarColaborador = async (colaborador: Worker, setDados: Function, 
 };
 
 export const atualizarColaborador = async (colaborador: Worker, setDados: Function, header: Object = {}) => {
-    await atualizar("/colaboradores", colaborador, setDados, header);
+    await atualizar(`/colaboradores/${colaborador.id}`, colaborador, setDados, header);
 };
 
 export const deletarColaborador = async (id: number, header: Object = {}) => {
