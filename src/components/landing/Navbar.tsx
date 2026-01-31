@@ -31,7 +31,7 @@ export function Navbar() {
             <a 
               key={link.name} 
               href={link.href}
-              className="text-sm font-medium text-gray-600 hover:text-primary-teal transition-colors"
+              className="font-medium text-corporate-slate hover:text-primary-teal transition-colors"
             >
               {link.name}
             </a>
@@ -39,7 +39,7 @@ export function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-4">
-          <a href="/login" className="text-sm font-semibold text-corporate-slate hover:text-primary-teal transition-colors">
+          <a href="/login" className="font-semibold text-corporate-slate hover:text-primary-teal transition-colors">
             Entrar
           </a>
           <Button variant="primary" className="px-6">
