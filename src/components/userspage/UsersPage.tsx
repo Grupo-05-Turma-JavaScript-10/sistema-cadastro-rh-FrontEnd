@@ -4,6 +4,7 @@ import StatCard from "./StatCard";
 import UsersTable from "./UsersTable";
 import PermissionLevels from "./PermissionsLevel";
 import type Worker from "../../models/Worker";
+import { Button } from "../ui/Button";
 
 function UsersPage() {
     const [workers, setWorkers] = useState<Worker[]>([]);
@@ -71,10 +72,10 @@ function UsersPage() {
                     </p>
                 </div>
 
-                <button className="inline-flex items-center gap-2 rounded-lg bg-[var(--color-primary-teal)] px-5 py-3 text-white font-semibold hover:opacity-90 transition">
-                    <Plus size={18} />
+                <Button>
+                    <Plus size={20} />
                     Novo Usuário
-                </button>
+                </Button>
             </header>
 
             <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm mb-6 flex items-center gap-3">
