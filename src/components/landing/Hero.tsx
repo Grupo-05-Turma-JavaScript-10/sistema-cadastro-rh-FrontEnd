@@ -1,3 +1,5 @@
+import { Button } from "../ui/Button";
+
 export function Hero() {
   const bgImageUrl = "https://ik.imagekit.io/k6kki72wv/background-fhd";
 
@@ -31,12 +33,16 @@ export function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <button className="bg-primary-teal text-white px-8 py-3.5 rounded-xl font-bold text-base hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-primary-teal/20">
+            <Button className="px-10 py-4 text-lg rounded-xl shadow-lg shadow-primary-teal/20">
               Começar Agora
-            </button>
-            <button className="bg-white/10 border border-white/20 text-white backdrop-blur-md px-8 py-3.5 rounded-xl font-bold text-base hover:bg-white/20 transition-all">
+            </Button>
+
+            <Button
+              variant="outline"
+              className="px-10 py-4 text-lg rounded-xl border-white/20 text-white backdrop-blur-md hover:bg-white/10 hover:text-white"
+            >
               Ver Demo
-            </button>
+            </Button>
           </div>
         </div>
 
