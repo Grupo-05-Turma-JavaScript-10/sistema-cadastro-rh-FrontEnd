@@ -1,10 +1,11 @@
-import { CheckCircle2Icon, Plus, Search, ShieldCheckIcon, UsersIcon } from "lucide-react";
+import { CheckCircle2Icon, Plus, ShieldCheckIcon, UsersIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import UsersTable from "../components/users/UsersTable";
 import PermissionLevels from "../components/users/PermissionsLevel";
 import type Worker from "../models/Worker";
 import { Button } from "../components/ui/Button";
 import { StatCard } from "../components/ui/StatCard";
+import { SearchBar } from "../components/ui/SearchBar";
 
 function Users() {
     const [workers, setWorkers] = useState<Worker[]>([]);
@@ -82,14 +83,10 @@ function Users() {
                 </Button>
             </header>
 
-            <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm mb-6 flex items-center gap-3">
-                <Search size={20} className="text-metallic-silver" />
-                <input
-                    type="text"
-                    placeholder="Buscar por nome, e-mail ou perfil"
-                    className="flex-1 outline-none text-corporate-slate placeholder:text-gray-400"
-                />
-            </div>
+            <SearchBar
+                placeholder="Buscar por nome, e-mail ou perfil"
+                className="mb-6"
+            />
 
             <PermissionLevels />
 

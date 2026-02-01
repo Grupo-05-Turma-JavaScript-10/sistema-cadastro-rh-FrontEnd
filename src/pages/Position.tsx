@@ -1,7 +1,8 @@
-import { Search, Plus, Pencil, Trash2, Building2Icon, UsersIcon } from "lucide-react";
+import { Plus, Pencil, Trash2, Building2Icon, UsersIcon } from "lucide-react";
 import { Card } from "../components/ui/Card";
 import { Badge, type BadgeVariant } from "../components/ui/Badge";
 import { Button } from "../components/ui/Button";
+import { SearchBar } from "../components/ui/SearchBar";
 
 interface Position {
     id: number;
@@ -25,8 +26,8 @@ export function Cargos() {
     ];
 
     function handleNewPosition() {
-    alert("Teste modal");
-  }
+        alert("Teste modal");
+    }
 
     return (
         <div className="space-y-6">
@@ -42,14 +43,10 @@ export function Cargos() {
                 </Button>
             </header>
 
-            <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm mb-6 flex items-center gap-3">
-                <Search size={20} className="text-metallic-silver" />
-                <input
-                    type="text"
-                    placeholder="Buscar por cargo..."
-                    className="flex-1 outline-none text-corporate-slate placeholder:text-gray-400"
-                />
-            </div>
+            <SearchBar
+                placeholder="Buscar por cargo..."
+                className="mb-6"
+            />
 
 
             <div className="md:hidden space-y-4">
