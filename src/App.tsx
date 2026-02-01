@@ -5,11 +5,13 @@ import { Cargos } from "./pages/Position";
 import { LandingPage } from "./pages/LandingPage";
 import { Footer } from "./components/landing/Footer";
 import UsersPage from "./pages/Users";
+import { Login } from "./pages/Login";
 
 
 function Layout() {
   const location = useLocation();
-  const isPublicPage = location.pathname === "/";
+  const isPublicPage =
+    location.pathname === "/" || location.pathname === "/login";
 
   return (
     <div className="flex flex-col min-h-screen bg-background-light">
@@ -24,6 +26,7 @@ function Layout() {
         >
           <Routes>
             <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/cargos" element={<Cargos />} />
             <Route path="/usuarios" element={<UsersPage />} />
