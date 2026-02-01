@@ -3,6 +3,7 @@ import { Card } from "../components/ui/Card";
 import { Badge, type BadgeVariant } from "../components/ui/Badge";
 import { Button } from "../components/ui/Button";
 import { SearchBar } from "../components/ui/SearchBar";
+import { PageHeader } from "../components/ui/PageHeader";
 
 interface Position {
     id: number;
@@ -31,17 +32,15 @@ export function Cargos() {
 
     return (
         <div className="space-y-6">
-            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 ">
-                <div>
-                    <h1 className="text-2xl md:text-3xl font-bold text-corporate-slate">Cargos & Estrutura</h1>
-                    <p className="text-metallic-silver mt-1">Gerencie a estrutura organizacional</p>
-                </div>
-
+            <PageHeader
+                title="Cargos & Estrutura"
+                subtitle="Gerencie a estrutura organizacional"
+            >
                 <Button onClick={handleNewPosition}>
                     <Plus size={20} />
                     Novo Cargo
                 </Button>
-            </header>
+            </PageHeader>
 
             <SearchBar
                 placeholder="Buscar por cargo..."

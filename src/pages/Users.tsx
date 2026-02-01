@@ -6,6 +6,7 @@ import type Worker from "../models/Worker";
 import { Button } from "../components/ui/Button";
 import { StatCard } from "../components/ui/StatCard";
 import { SearchBar } from "../components/ui/SearchBar";
+import { PageHeader } from "../components/ui/PageHeader";
 
 function Users() {
     const [workers, setWorkers] = useState<Worker[]>([]);
@@ -69,19 +70,15 @@ function Users() {
 
     return (
         <div className="space-y-6">
-            <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <div>
-                    <h1 className="text-2xl md:text-3xl font-bold text-corporate-slate">Usuários do Sistema</h1>
-                    <p className="text-metallic-silver mt-1">
-                        Controle quem pode acessar e gerenciar o sistema
-                    </p>
-                </div>
-
+            <PageHeader 
+                title="Usuários do Sistema" 
+                subtitle="Controle quem pode acessar e gerenciar o sistema"
+            >
                 <Button onClick={handleNewUser}>
                     <Plus size={20} />
                     Novo Usuário
                 </Button>
-            </header>
+            </PageHeader>
 
             <SearchBar
                 placeholder="Buscar por nome, e-mail ou perfil"

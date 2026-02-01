@@ -4,6 +4,7 @@ import { Button } from "../components/ui/Button";
 import CollaboratorsTable from "../components/collaborators/CollaboratorsTable";
 import type Worker from "../models/Worker";
 import { SearchBar } from "../components/ui/SearchBar";
+import { PageHeader } from "../components/ui/PageHeader";
 
 export function Collaborators() {
     const [collaborators, setCollaborators] = useState<Worker[]>([]);
@@ -44,18 +45,15 @@ export function Collaborators() {
     return (
         <div className="space-y-6">
 
-            <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div>
-                    <h1 className="text-2xl md:text-3xl font-bold text-corporate-slate">Colaboradores</h1>
-                    <p className="text-metallic-silver mt-1">
-                        Gerencie os colaboradores da empresa
-                    </p>
-                </div>
+            <PageHeader
+                title="Colaboradores"
+                subtitle="Gerencie os colaboradores da empresa"
+            >
                 <Button onClick={handleNewCollaborator}>
                     <PlusIcon size={20} />
                     Novo Colaborador
                 </Button>
-            </header>
+            </PageHeader>
 
             <div className="flex flex-col md:flex-row gap-3">
 
