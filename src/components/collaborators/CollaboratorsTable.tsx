@@ -1,0 +1,142 @@
+import { PencilIcon, EyeIcon } from "lucide-react"; 
+import { Badge } from "../ui/Badge";
+import { Card } from "../ui/Card";
+import type Worker from "../../models/Worker";
+
+interface CollaboratorsTableProps {
+  workers: Worker[];
+  onView?: (worker: Worker) => void;
+  onEdit?: (worker: Worker) => void;
+}
+
+export default function CollaboratorsTable({ workers, onView, onEdit }: CollaboratorsTableProps) {
+  
+  const formatDate = (date: Date | string) => {
+    if (!date) return "-";
+    const d = new Date(date);
+    return new Intl.DateTimeFormat('pt-BR').format(d);
+  };
+
+  const getDepartment = (role: string) => {
+    if (role.includes("Projetos") || role.includes("Desenvolvedor")) return "TI";
+    if (role.includes("Designer")) return "Design";
+    if (role.includes("RH")) return "RH";
+    return "Administrativo";
+  };
+
+  return (
+    <div>
+      <div className="md:hidden space-y-4">
+        {workers.map((worker) => (
+          <div
+            key={worker.id}
+            className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm flex flex-col gap-3"
+          >
+            <div className="flex justify-between items-start">
+              <div>
+                <span className="font-bold text-corporate-slate block">
+                  {worker.nome}
+                </span>
+                <span className="text-xs text-metallic-silver">
+                  {worker.cargo?.nome || "Sem cargo"}
+                </span>
+              </div>
+              <Badge variant={worker.status ? "success" : "danger"}>
+                {worker.status ? "Ativo" : "Inativo"}
+              </Badge>
+            </div>
+
+            <div className="text-sm text-gray-600 bg-gray-50 p-2 rounded-md space-y-1">
+              <p><span className="font-semibold">Dept:</span> {getDepartment(worker.cargo?.nome || "")}</p>
+              <p><span className="font-semibold">Admissão:</span> {formatDate(worker.data_admissão)}</p>
+            </div>
+
+            <div className="flex items-center gap-2 pt-2 border-t border-gray-50 mt-1">
+              <button
+                onClick={() => onView?.(worker)}
+                className="flex-1 flex items-center justify-center gap-2 p-2 text-primary-teal hover:bg-primary-teal/10 rounded-md transition-colors text-sm font-medium"
+              >
+                <EyeIcon size={16} /> Ver
+              </button>
+              <button
+                onClick={() => onEdit?.(worker)}
+                className="flex-1 flex items-center justify-center gap-2 p-2 text-primary-teal hover:bg-primary-teal/10 rounded-md transition-colors text-sm font-medium"
+              >
+                <PencilIcon size={16} /> Editar
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="hidden md:block">
+        <Card className="p-0 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-gray-50 border-b border-gray-100 text-xs uppercase text-metallic-silver font-semibold">
+                  <th className="p-4 pl-6">Nome</th>
+                  <th className="p-4">Cargo</th>
+                  <th className="p-4">Departamento</th>
+                  <th className="p-4">Data de Admissão</th>
+                  <th className="p-4">Status</th>
+                  <th className="p-4 text-right pr-6">Ações</th>
+                </tr>
+              </thead>
+
+              <tbody className="divide-y divide-gray-50">
+                {workers.map((worker) => (
+                  <tr
+                    key={worker.id}
+                    className="hover:bg-gray-50/50 transition-colors group"
+                  >
+                    <td className="p-4 pl-6 font-medium text-corporate-slate">
+                      {worker.nome}
+                    </td>
+
+                    <td className="p-4 text-gray-600">
+                      {worker.cargo?.nome || "-"}
+                    </td>
+
+                    <td className="p-4 text-gray-600">
+                      {getDepartment(worker.cargo?.nome || "")}
+                    </td>
+
+                    <td className="p-4 text-gray-600">
+                      {formatDate(worker.data_admissão)}
+                    </td>
+
+                    <td className="p-4">
+                      <Badge variant={worker.status ? "success" : "danger"}>
+                        {worker.status ? "Ativo" : "Inativo"}
+                      </Badge>
+                    </td>
+
+                    <td className="p-4 text-right pr-6">
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => onView?.(worker)}
+                          className="p-2 text-primary-teal hover:bg-primary-teal/10 rounded-md transition-colors"
+                          title="Visualizar"
+                        >
+                          <EyeIcon size={18} />
+                        </button>
+                        <button
+                          onClick={() => onEdit?.(worker)}
+                          className="p-2 text-primary-teal hover:bg-primary-teal/10 rounded-md transition-colors"
+                          title="Editar"
+                        >
+                          <PencilIcon size={18} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+}
