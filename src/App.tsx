@@ -4,6 +4,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { Cargos } from "./pages/Position";
 import { LandingPage } from "./pages/LandingPage";
 import { Footer } from "./components/landing/Footer";
+import { Collaborators } from "./pages/Collaborators";
 import UsersPage from "./pages/Users";
 
 
@@ -25,6 +26,7 @@ function Layout() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/colaboradores" element={<Collaborators />} />
             <Route path="/cargos" element={<Cargos />} />
             <Route path="/usuarios" element={<UsersPage />} />
 

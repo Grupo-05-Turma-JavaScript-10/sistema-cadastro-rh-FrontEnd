@@ -1,0 +1,83 @@
+import { useState, useEffect } from "react";
+import { SearchIcon, PlusIcon, FilterIcon } from "lucide-react";
+import { Button } from "../components/ui/Button";
+import CollaboratorsTable from "../components/collaborators/CollaboratorsTable";
+import type Worker from "../models/Worker";
+
+export function Collaborators() {
+  const [collaborators, setCollaborators] = useState<Worker[]>([]);
+
+  useEffect(() => {
+
+    const mockData: Worker[] = [
+      {
+        id: 1,
+        nome: "Maria Silva",
+        cargo: { id: 1, nome: "Gerente de Projetos", descricao: "" },
+        email: "maria@empresa.com",
+        cpf: "123",
+        data_admissão: new Date("2023-03-15"),
+        salario: 0,
+        status: true,
+        usuario: { idUsuario: 1, nome: "maria", senha: "", foto: "" }
+      },
+      {
+        id: 2,
+        nome: "João Santos",
+        cargo: { id: 2, nome: "Desenvolvedor Senior", descricao: "" },
+        email: "joao@empresa.com",
+        cpf: "123",
+        data_admissão: new Date("2022-05-20"),
+        salario: 0,
+        status: true,
+        usuario: { idUsuario: 2, nome: "joao", senha: "", foto: "" }
+      },
+    ];
+    setCollaborators(mockData);
+  }, []);
+
+  function handleNewCollaborator() {
+    console.log("Abrir modal de novo colaborador");
+  }
+
+  return (
+    <div className="space-y-6">
+
+      <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold text-corporate-slate">Colaboradores</h1>
+          <p className="text-sm text-metallic-silver mt-1">
+            Gerencie os colaboradores da empresa
+          </p>
+        </div>
+        <Button onClick={handleNewCollaborator}>
+          <PlusIcon size={20} />
+          Novo Colaborador
+        </Button>
+      </header>
+
+      <div className="flex flex-col md:flex-row gap-3">
+        <div className="flex-1 bg-white p-3 rounded-lg border border-gray-200 shadow-sm flex items-center gap-3">
+          <SearchIcon size={20} className="text-metallic-silver" />
+          <input
+            type="text"
+            placeholder="Buscar por nome, cargo ou departamento..."
+            className="flex-1 outline-none text-corporate-slate placeholder:text-gray-400 text-sm"
+          />
+        </div>
+        <button className="flex items-center gap-2 px-4 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors font-medium text-sm">
+          <FilterIcon size={18} />
+          Filtros
+        </button>
+      </div>
+
+
+      <CollaboratorsTable 
+        workers={collaborators}
+        onView={(worker) => console.log("Ver", worker)}
+        onEdit={(worker) => console.log("Editar", worker)}
+      />
+
+    </div>
+  );
+}
