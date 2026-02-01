@@ -1,4 +1,5 @@
 import { Users, Search, ShieldCheck } from "lucide-react";
+import { Card } from "../ui/Card";
 
 export function Features() {
   const features = [
@@ -26,13 +27,13 @@ export function Features() {
           Principais Funcionalidades
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {features.map((feature, index) => (
-            <div
+            <Card
               key={index}
-              className="flex flex-col items-center text-center group"
+              className="flex flex-col items-center text-center group hover:shadow-md transition-shadow duration-300"
             >
-              <div className="w-24 h-24 rounded-full bg-primary-teal/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+              <div className="w-20 h-20 rounded-full bg-primary-teal/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 {feature.icon}
               </div>
 
@@ -42,7 +43,7 @@ export function Features() {
               <p className="text-metallic-silver font-medium text-sm">
                 {feature.description}
               </p>
-            </div>
+            </Card>
           ))}
         </div>
       </div>
