@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom"
 import { MenuIcon, XIcon } from "lucide-react"; 
 import { Button } from "../ui/Button"; 
 
@@ -16,7 +17,7 @@ export function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
       <div className="container mx-auto px-4 md:px-8 h-20 flex items-center justify-between">
         
-        <div className="flex items-center gap-2 cursor-pointer hover:opacity-90 transition-opacity">
+       <Link to="/" className="flex items-center gap-2 cursor-pointer hover:opacity-90 transition-opacity">
           <div className="bg-primary-teal w-8 h-8 rounded-lg flex items-center justify-center shadow-sm">
              <div className="w-3.5 h-3.5 border-2 border-white rounded-[1px] transform rotate-45" />
           </div>
@@ -24,7 +25,7 @@ export function Navbar() {
           <span className="text-xl font-bold text-corporate-slate tracking-tight">
             Colab<span className="text-primary-teal">+</span>
           </span>
-        </div>
+        </Link>
 
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
@@ -39,12 +40,15 @@ export function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-4">
-          <a href="/login" className="font-semibold text-corporate-slate hover:text-primary-teal transition-colors">
-            Entrar
-          </a>
-          <Button variant="primary" className="px-6">
-            Teste Grátis
-          </Button>
+         <Link to="/login">
+            <Button variant="outline" >
+                Entrar
+            </Button>
+          </Link>
+          
+          <Link to="/register">
+             <Button>Teste Grátis</Button>
+          </Link>
         </div>
 
         <button 
