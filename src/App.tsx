@@ -6,6 +6,7 @@ import { LandingPage } from "./pages/LandingPage";
 import { Footer } from "./components/landing/Footer";
 import { Collaborators } from "./pages/Collaborators";
 import UsersPage from "./pages/Users";
+import { Settings } from "./pages/Settings";
 
 
 function Layout() {
@@ -29,6 +30,7 @@ function Layout() {
             <Route path="/colaboradores" element={<Collaborators />} />
             <Route path="/cargos" element={<Cargos />} />
             <Route path="/usuarios" element={<UsersPage />} />
+            <Route path="/configuracoes" element={<Settings />} />
 
             <Route
               path="/colaboradores"
