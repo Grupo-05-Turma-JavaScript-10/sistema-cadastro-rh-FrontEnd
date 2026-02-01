@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { Sidebar } from "./components/sidebar/Sidebar";
 import { Dashboard } from "./pages/Dashboard";
-import { Cargos } from "./pages/Position";
+import { Cargos } from "./pages/Positions";
 import { LandingPage } from "./pages/LandingPage";
 import { Footer } from "./components/landing/Footer";
 import { Collaborators } from "./pages/Collaborators";
