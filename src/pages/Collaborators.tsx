@@ -47,7 +47,7 @@ export function Collaborators() {
             <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
                     <h1 className="text-2xl md:text-3xl font-bold text-corporate-slate">Colaboradores</h1>
-                    <p className="text-sm text-metallic-silver mt-1">
+                    <p className="text-metallic-silver mt-1">
                         Gerencie os colaboradores da empresa
                     </p>
                 </div>
