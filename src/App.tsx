@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import { Sidebar } from "./components/sidebar/Sidebar";
 import { Dashboard } from "./pages/Dashboard";
 import { Cargos } from "./pages/Positions";
@@ -25,7 +26,9 @@ function Layout() {
               : "flex flex-col"
             }`}
         >
-          <Routes>
+
+          <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/dashboard" element={<Dashboard />} />
@@ -33,20 +36,11 @@ function Layout() {
             <Route path="/cargos" element={<Cargos />} />
             <Route path="/usuarios" element={<UsersPage />} />
 
-            <Route
-              path="/colaboradores"
-              element={
-                <div className="p-8 text-corporate-slate italic">
-                  <h1>Em construção...</h1>
-                </div>
-              }
-            />
+            
 
-            <Route
-              path="*"
-              element={<div className="p-8">Página não encontrada</div>}
-            />
+           
           </Routes>
+          </AnimatePresence>
         </div>
       </div>
       {isPublicPage && <Footer />}

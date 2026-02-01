@@ -7,6 +7,7 @@ import { Button } from "../components/ui/Button";
 import { StatCard } from "../components/ui/StatCard";
 import { SearchBar } from "../components/ui/SearchBar";
 import { PageHeader } from "../components/ui/PageHeader";
+import { PageTransition } from "../components/ui/PageTransition";
 
 function Users() {
     const [workers, setWorkers] = useState<Worker[]>([]);
@@ -69,6 +70,7 @@ function Users() {
     }
 
     return (
+        <PageTransition>
         <div className="space-y-6">
             <PageHeader 
                 title="Usuários do Sistema" 
@@ -113,6 +115,7 @@ function Users() {
                 />
             </section>
         </div>
+        </PageTransition>
     );
 }
 

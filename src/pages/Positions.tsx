@@ -4,6 +4,7 @@ import { Button } from "../components/ui/Button";
 import { SearchBar } from "../components/ui/SearchBar";
 import { PageHeader } from "../components/ui/PageHeader";
 import { PositionsTable, type Position } from "../components/positions/PositionsTable";
+import { PageTransition } from "../components/ui/PageTransition";
 
 
 export function Cargos() {
@@ -23,6 +24,7 @@ export function Cargos() {
     }
 
     return (
+        <PageTransition>
         <div className="space-y-6">
             <PageHeader
                 title="Cargos & Estrutura"
@@ -46,5 +48,6 @@ export function Cargos() {
                 onDelete={(id) => console.log("Deletar", id)}
             />
         </div>
+        </PageTransition>
     );
 }
