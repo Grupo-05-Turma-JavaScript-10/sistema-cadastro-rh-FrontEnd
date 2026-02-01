@@ -73,7 +73,7 @@ function UsersTable({ workers, onEdit, onDelete }: UsersTableProps) {
                 >
                   <Pencil size={16} className="mr-2" /> Editar
                 </Button>
-
+                
                 <Button
                   variant="ghost"
                   onClick={() => onDelete?.(worker.id)}
@@ -141,7 +141,7 @@ function UsersTable({ workers, onEdit, onDelete }: UsersTableProps) {
                           >
                             <Pencil size={18} />
                           </Button>
-
+                          
                           <Button
                             variant="ghost"
                             onClick={() => onDelete?.(worker.id)}
