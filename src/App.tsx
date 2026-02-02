@@ -7,6 +7,9 @@ import { Footer } from "./components/landing/Footer";
 import { Collaborators } from "./pages/Collaborators";
 import UsersPage from "./pages/Users";
 import { Login } from "./pages/Login";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { PrivateRoute } from "./routes/PrivateRoute";
 
 
 function Layout() {
@@ -28,25 +31,19 @@ function Layout() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/colaboradores" element={<Collaborators />} />
-            <Route path="/cargos" element={<Cargos />} />
-            <Route path="/usuarios" element={<UsersPage />} />
+            <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+            <Route path="/colaboradores" element={<PrivateRoute><Collaborators /></PrivateRoute>} />
+            <Route path="/cargos" element={<PrivateRoute><Cargos /></PrivateRoute>} />
+            <Route path="/usuarios" element={<PrivateRoute><UsersPage /></PrivateRoute>} />
 
-            <Route
-              path="/colaboradores"
-              element={
-                <div className="p-8 text-corporate-slate italic">
-                  <h1>Em construção...</h1>
-                </div>
-              }
-            />
+            
 
             <Route
               path="*"
               element={<div className="p-8">Página não encontrada</div>}
             />
           </Routes>
+          <ToastContainer position="top-right" autoClose={3000} />
         </div>
       </div>
       {isPublicPage && <Footer />}
