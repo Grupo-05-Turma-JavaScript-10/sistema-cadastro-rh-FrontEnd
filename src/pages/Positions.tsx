@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "../components/ui/Button";
 import { SearchBar } from "../components/ui/SearchBar";
 import { PageHeader } from "../components/ui/PageHeader";
+import { PageTransition } from "../components/ui/PageTransition";
 import { PositionsTable, type Position } from "../components/positions/PositionsTable";
 import PositionForm from "../components/positions/PositionForm";
 import ConfirmDialog from "../components/ui/ConfirmDialog";

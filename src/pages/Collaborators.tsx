@@ -11,6 +11,7 @@ import { useCollaborators } from "../hooks/useCollaborators";
 import { useCollaborator } from "../hooks/useCollaborator";
 import { deletarColaborador } from "../services/colaboradorService";
 import { toast } from "react-toastify";
+import { PageTransition } from "../components/ui/PageTransition";
 
 export function Collaborators() {
     const { data: collaborators, query, setQuery, refetch, updateLocal } = useCollaborators();
@@ -88,16 +89,13 @@ export function Collaborators() {
 
             <CollaboratorsTable
                 workers={collaborators}
-                onView={(worker) => {
-                    setSelectedId(worker.id);
-                }}
-                onEdit={handleEdit}
                 onDelete={(worker) => handleDelete(worker)}
                 onCalculate={(worker) => {
                     setSelectedId(worker.id);
                     setOpenCalc(true);
                 }}
             />
+
 
             <ConfirmDialog
                 open={openDelete}

@@ -1,17 +1,16 @@
-import { PencilIcon, EyeIcon, TrashIcon, Calculator } from "lucide-react"; 
+import { PencilIcon, TrashIcon, Calculator } from "lucide-react"; 
 import { Badge } from "../ui/Badge";
 import { Card } from "../ui/Card";
 import type Worker from "../../models/Worker";
 
 interface CollaboratorsTableProps {
   workers: Worker[];
-  onView?: (worker: Worker) => void;
   onEdit?: (worker: Worker) => void;
   onDelete?: (worker: Worker) => void;
   onCalculate?: (worker: Worker) => void;
 }
 
-export default function CollaboratorsTable({ workers, onView, onEdit, onDelete, onCalculate }: CollaboratorsTableProps) {
+export default function CollaboratorsTable({ workers, onEdit, onDelete, onCalculate }: CollaboratorsTableProps) {
   
   const formatDate = (date: Date | string) => {
     if (!date) return "-";

@@ -1,5 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { Sidebar } from "./components/sidebar/Sidebar";
 import { Dashboard } from "./pages/Dashboard";
 import { Cargos } from "./pages/Positions";
@@ -10,6 +9,9 @@ import UsersPage from "./pages/Users";
 import { Login } from "./pages/Login";
 import { RegisterForm } from "./pages/Register";
 import { Settings } from "./pages/Settings";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import type { ReactNode } from "react";
 
 function Layout() {
   const location = useLocation();
@@ -20,6 +22,12 @@ function Layout() {
     location.pathname === "/cadastro";
 
   const showFooter = location.pathname === "/";
+
+  function PrivateRoute({ children }: { children: ReactNode }) {
+    const token = localStorage.getItem("token");
+    if (!token) return <Navigate to="/login" replace />;
+    return <>{children}</>;
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-background-light">
@@ -34,16 +42,15 @@ function Layout() {
           }`}
         >
 
-          <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/cadastro" element={<RegisterForm />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/colaboradores" element={<Collaborators />} />
-            <Route path="/cargos" element={<Cargos />} />
-            <Route path="/usuarios" element={<UsersPage />} />
-            <Route path="/configuracoes" element={<Settings />} />
+            <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+            <Route path="/colaboradores" element={<PrivateRoute><Collaborators /></PrivateRoute>} />
+            <Route path="/cargos" element={<PrivateRoute><Cargos /></PrivateRoute>} />
+            <Route path="/usuarios" element={<PrivateRoute><UsersPage /></PrivateRoute>} />
+            <Route path="/configuracoes" element={<PrivateRoute><Settings /></PrivateRoute>} />
 
             <Route
               path="*"
@@ -56,7 +63,6 @@ function Layout() {
               }
             />
           </Routes>
-          </AnimatePresence>
         </div>
       </div>
 
@@ -69,6 +75,7 @@ function App() {
   return (
     <BrowserRouter>
       <Layout />
+      <ToastContainer position="top-right" autoClose={3000} theme="colored" />
     </BrowserRouter>
   );
 }
