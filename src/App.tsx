@@ -39,6 +39,7 @@ function Layout() {
             <Route path="/colaboradores" element={<Collaborators />} />
             <Route path="/cargos" element={<Cargos />} />
             <Route path="/usuarios" element={<UsersPage />} />
+            <Route path="/configuracoes" element={<Settings />} />
 
             <Route
               path="*"
