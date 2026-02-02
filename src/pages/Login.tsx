@@ -9,7 +9,7 @@ export function Login() {
   const { usuario, handleLogin, isLoading } = useContext(AuthContext);
 
   const [usuarioLogin, setUsuarioLogin] = useState<UsuarioLogin>(
-    {} as UsuarioLogin
+    {} as UsuarioLogin,
   );
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export function Login() {
               id="usuario"
               name="usuario"
               placeholder="Seu usuário"
-              value={usuarioLogin.usuario}
+              value={usuarioLogin.usuario || ""}
               onChange={atualizarEstado}
               className="mt-2 w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-corporate-slate placeholder:text-gray-400 outline-none transition focus:border-primary-teal focus:ring-2 focus:ring-primary-teal/20"
               required
@@ -71,7 +71,7 @@ export function Login() {
               id="senha"
               name="senha"
               placeholder="••••••••"
-              value={usuarioLogin.senha}
+              value={usuarioLogin.senha || ""}
               onChange={atualizarEstado}
               className="mt-2 w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-corporate-slate placeholder:text-gray-400 outline-none transition focus:border-primary-teal focus:ring-2 focus:ring-primary-teal/20"
               required
