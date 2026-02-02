@@ -9,6 +9,7 @@ import { Collaborators } from "./pages/Collaborators";
 import UsersPage from "./pages/Users";
 import { Login } from "./pages/Login";
 import { RegisterForm } from "./pages/Register";
+import { Settings } from "./pages/Settings";
 
 function Layout() {
   const location = useLocation();
