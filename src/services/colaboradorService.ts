@@ -1,35 +1,50 @@
 import type Worker from "../models/Worker";
-import { atualizar, buscar, cadastrar, deletar } from "./baseService";
+import api from "./api";
+import type SalaryRecord from "../models/SalaryRecord";
 
-export const listarColaboradores = async (setDados: Function, header: Object = {}) => {
-    await buscar("/colaboradores", setDados, header);
-};
+export async function listarColaboradores(): Promise<Worker[]> {
+  const { data } = await api.get("/colaboradores");
+  return data;
+}
 
-export const buscarColaboradorPorId = async (id: number, setDados: Function, header: Object = {}) => {
-    await buscar(`/colaboradores/${id}`, setDados, header);
-};
+export async function buscarColaboradorPorId(id: number): Promise<Worker> {
+  const { data } = await api.get(`/colaboradores/${id}`);
+  return data;
+}
 
-export const buscarColaboradoresPorNome = async (nome: string, setDados: Function, header: Object = {}) => {
-    await buscar(`/colaboradores/nome/${nome}`, setDados, header);
-};
+export async function buscarColaboradoresPorNome(nome: string): Promise<Worker[]> {
+  const { data } = await api.get(`/colaboradores/nome/${encodeURIComponent(nome)}`);
+  return data;
+}
 
-export const criarColaborador = async (colaborador: Worker, setDados: Function, header: Object = {}) => {
-    await cadastrar("/colaboradores", colaborador, setDados, header);
-};
+export async function criarColaborador(colaborador: Worker): Promise<Worker> {
+  const { data } = await api.post("/colaboradores", colaborador);
+  return data;
+}
 
-export const atualizarColaborador = async (colaborador: Worker, setDados: Function, header: Object = {}) => {
-    await atualizar(`/colaboradores/${colaborador.id}`, colaborador, setDados, header);
-};
+export async function atualizarColaborador(colaborador: Worker): Promise<Worker> {
+  const { data } = await api.put(`/colaboradores`, colaborador);
+  return data;
+}
 
-export const deletarColaborador = async (id: number, header: Object = {}) => {
-    await deletar(`/colaboradores/${id}`, header);
-};
+export async function deletarColaborador(id: number): Promise<void> {
+  await api.delete(`/colaboradores/${id}`);
+}
 
-export const calcularSalarioColaborador = async (
-    id: number,
-    payload: Object,
-    setDados: Function,
-    header: Object = {}
-) => {
-    await atualizar(`/colaboradores/calcular-salario/${id}`, payload, setDados, header);
-};
+export async function calcularSalarioColaborador(id: number, payload: Record<string, unknown>): Promise<Worker> {
+  try {
+    const { data } = await api.put(`/colaboradores/calcular-salario/${id}`, payload);
+    return data;
+  } catch (err: any) {
+    if (err?.response?.status === 404 || err?.response?.status === 405) {
+      const { data } = await api.post(`/colaboradores/${id}/calcular-salario`, payload);
+      return data;
+    }
+    throw err;
+  }
+}
+
+export async function listarSalariosPorColaborador(id: number): Promise<SalaryRecord[]> {
+  const { data } = await api.get(`/colaboradores/${id}/salarios`);
+  return data;
+}
