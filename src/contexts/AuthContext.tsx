@@ -1,4 +1,4 @@
-import { createContext, useState, type ReactNode } from "react";
+import { createContext, useEffect, useState, type ReactNode } from "react";
 import { login } from "../services/Service";
 import type UsuarioLogin from "../models/UsuarioLogin";
 
@@ -51,6 +51,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
         token: "",
       });
     }
+
+  useEffect(() => {
+    if (usuario.token) {
+      const sanitized = usuario.token.replace(/^"+|"+$/g, "").trim();
+      localStorage.setItem("token", sanitized);
+    } else {
+      localStorage.removeItem("token");
+    }
+  }, [usuario.token]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const sanitized = token.replace(/^"+|"+$/g, "").trim();
+      setUsuario((prev) => ({ ...prev, token: sanitized }));
+    }
+  }, []);
 
    return(
     <AuthContext.Provider value={{usuario, handleLogin, handleLogout, isLoading}}>
