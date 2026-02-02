@@ -10,7 +10,7 @@ export function Login() {
   const { usuario, handleLogin, isLoading } = useContext(AuthContext);
 
   const [usuarioLogin, setUsuarioLogin] = useState<UsuarioLogin>(
-    {} as UsuarioLogin
+    {} as UsuarioLogin,
   );
 
   useEffect(() => {
@@ -47,63 +47,38 @@ export function Login() {
             </p>
           </div>
 
-          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-            <div className="space-y-1.5">
-              <label className="text-sm font-bold text-corporate-slate ml-1">
-                Usuário
-              </label>
-              <div className="relative group">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary-teal transition-colors">
-                  <User size={18} />
-                </span>
-                <input
-                  type="text"
-                  name="usuario"
-                  placeholder="ex: maria.silva"
-                  value={usuarioLogin.usuario}
-                  onChange={atualizarEstado}
-                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50/30 outline-none transition-all focus:bg-white focus:border-primary-teal focus:ring-4 focus:ring-primary-teal/10 text-sm text-corporate-slate"
-                  required
-                />
-              </div>
-            </div>
+        <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
+          <div>
+            <label className="text-sm font-semibold text-corporate-slate">
+              Usuário
+            </label>
+            <input
+              type="text"
+              id="usuario"
+              name="usuario"
+              placeholder="Seu usuário"
+              value={usuarioLogin.usuario || ""}
+              onChange={atualizarEstado}
+              className="mt-2 w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-corporate-slate placeholder:text-gray-400 outline-none transition focus:border-primary-teal focus:ring-2 focus:ring-primary-teal/20"
+              required
+            />
+          </div>
 
-            <div className="space-y-1.5">
-              <div className="flex justify-between items-center ml-1">
-                <label className="text-sm font-bold text-corporate-slate">
-                  Senha
-                </label>
-                <Link
-                  to="/recuperar-senha"
-                  className="text-xs font-semibold text-primary-teal hover:underline"
-                >
-                  Esqueci minha senha
-                </Link>
-              </div>
-              <div className="relative group">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary-teal transition-colors">
-                  <Lock size={18} />
-                </span>
-                <input
-                  type="password"
-                  name="senha"
-                  placeholder="••••••••"
-                  value={usuarioLogin.senha}
-                  onChange={atualizarEstado}
-                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50/30 outline-none transition-all focus:bg-white focus:border-primary-teal focus:ring-4 focus:ring-primary-teal/10 text-sm text-corporate-slate"
-                  required
-                />
-              </div>
-            </div>
-
-            <Button
-              type="submit"
-              className="w-full py-4 text-base font-bold shadow-lg shadow-primary-teal/20 transition-transform active:scale-[0.98]"
-              isLoading={isLoading}
-            >
-              Entrar na plataforma
-            </Button>
-          </form>
+          <div>
+            <label className="text-sm font-semibold text-corporate-slate">
+              Senha
+            </label>
+            <input
+              type="password"
+              id="senha"
+              name="senha"
+              placeholder="••••••••"
+              value={usuarioLogin.senha || ""}
+              onChange={atualizarEstado}
+              className="mt-2 w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-corporate-slate placeholder:text-gray-400 outline-none transition focus:border-primary-teal focus:ring-2 focus:ring-primary-teal/20"
+              required
+            />
+          </div>
 
           <p className="mt-8 text-center text-sm text-metallic-silver">
             Novo por aqui?{" "}

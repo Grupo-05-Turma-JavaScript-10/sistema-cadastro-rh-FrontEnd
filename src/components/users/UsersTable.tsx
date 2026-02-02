@@ -7,6 +7,7 @@ import {
 import { Badge, type BadgeVariant } from "../ui/Badge";
 import { Card } from "../ui/Card";
 import type Worker from "../../models/Worker";
+import { Button } from "../ui/Button";
 
 interface UsersTableProps {
   workers: Worker[];
@@ -32,8 +33,6 @@ function UsersTable({ workers, onEdit, onDelete }: UsersTableProps) {
     };
   };
 
-
-
   return (
     <div>
       <div className="md:hidden space-y-4">
@@ -54,29 +53,34 @@ function UsersTable({ workers, onEdit, onDelete }: UsersTableProps) {
                     {worker.email}
                   </span>
                 </div>
+
                 <Badge variant={role.variant}>{role.label}</Badge>
               </div>
 
               <div className="flex items-center gap-2 text-sm bg-gray-50 p-2 rounded-md">
                 <ShieldIcon size={16} className="text-metallic-silver" />
-               <Badge variant={worker.status ? "success" : "danger"}>
+
+                <Badge variant={worker.status ? "success" : "neutral"}>
                   {worker.status ? "Ativo" : "Inativo"}
                 </Badge>
               </div>
 
               <div className="flex items-center gap-2 pt-2 border-t border-gray-50 mt-1">
-                <button
+                <Button
+                  variant="ghost"
                   onClick={() => onEdit?.(worker)}
-                  className="flex-1 flex items-center justify-center gap-2 p-2 text-primary-teal hover:bg-primary-teal/10 rounded-md transition-colors text-sm font-medium"
+                  className="flex-1 justify-center text-primary-teal hover:bg-primary-teal/10 hover:text-primary-teal"
                 >
-                  <Pencil size={16} /> Editar
-                </button>
-                <button
+                  <Pencil size={16} className="mr-2" /> Editar
+                </Button>
+
+                <Button
+                  variant="ghost"
                   onClick={() => onDelete?.(worker.id)}
-                  className="flex-1 flex items-center justify-center gap-2 p-2 text-error-red hover:bg-error-red/10 rounded-md transition-colors text-sm font-medium"
+                  className="flex-1 justify-center text-error-red hover:bg-error-red/10 hover:text-error-red"
                 >
-                  <Trash2 size={16} /> Excluir
-                </button>
+                  <Trash2 size={16} className="mr-2" /> Excluir
+                </Button>
               </div>
             </div>
           );
@@ -122,27 +126,30 @@ function UsersTable({ workers, onEdit, onDelete }: UsersTableProps) {
                       </td>
 
                       <td className="p-4">
-                        <Badge variant={worker.status ? "success" : "danger"}>
+                        <Badge variant={worker.status ? "success" : "neutral"}>
                           {worker.status ? "Ativo" : "Inativo"}
                         </Badge>
                       </td>
 
                       <td className="p-4 text-right pr-6">
                         <div className="flex items-center justify-end gap-2">
-                          <button
+                          <Button
+                            variant="ghost"
                             onClick={() => onEdit?.(worker)}
-                            className="p-2 text-primary-teal hover:bg-primary-teal/10 rounded-md transition-colors"
+                            className="p-2 h-auto w-auto text-primary-teal hover:bg-primary-teal/10 hover:text-primary-teal"
                             title="Editar"
                           >
                             <Pencil size={18} />
-                          </button>
-                          <button
+                          </Button>
+
+                          <Button
+                            variant="ghost"
                             onClick={() => onDelete?.(worker.id)}
-                            className="p-2 text-error-red hover:bg-error-red/10 rounded-md transition-colors"
+                            className="p-2 h-auto w-auto text-error-red hover:bg-error-red/10 hover:text-error-red"
                             title="Excluir"
                           >
                             <Trash2 size={18} />
-                          </button>
+                          </Button>
                         </div>
                       </td>
                     </tr>
@@ -156,4 +163,5 @@ function UsersTable({ workers, onEdit, onDelete }: UsersTableProps) {
     </div>
   );
 }
+
 export default UsersTable;
