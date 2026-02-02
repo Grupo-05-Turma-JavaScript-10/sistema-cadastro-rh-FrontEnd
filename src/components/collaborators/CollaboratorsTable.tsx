@@ -62,12 +62,6 @@ export default function CollaboratorsTable({ workers, onView, onEdit, onDelete, 
 
             <div className="flex items-center gap-2 pt-2 border-t border-gray-50 mt-1">
               <button
-                onClick={() => onView?.(worker)}
-                className="flex-1 flex items-center justify-center gap-2 p-2 text-primary-teal hover:bg-primary-teal/10 rounded-md transition-colors text-sm font-medium"
-              >
-                <EyeIcon size={16} /> Ver
-              </button>
-              <button
                 onClick={() => onEdit?.(worker)}
                 className="flex-1 flex items-center justify-center gap-2 p-2 text-primary-teal hover:bg-primary-teal/10 rounded-md transition-colors text-sm font-medium"
               >
@@ -139,13 +133,6 @@ export default function CollaboratorsTable({ workers, onView, onEdit, onDelete, 
 
                     <td className="p-4 text-right pr-6">
                       <div className="flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => onView?.(worker)}
-                          className="p-2 text-primary-teal hover:bg-primary-teal/10 rounded-md transition-colors"
-                          title="Visualizar"
-                        >
-                          <EyeIcon size={18} />
-                        </button>
                         <button
                           onClick={() => onEdit?.(worker)}
                           className="p-2 text-primary-teal hover:bg-primary-teal/10 rounded-md transition-colors"

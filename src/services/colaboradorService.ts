@@ -1,6 +1,5 @@
 import type Worker from "../models/Worker";
 import api from "./api";
-import type SalaryRecord from "../models/SalaryRecord";
 
 export async function listarColaboradores(): Promise<Worker[]> {
   const { data } = await api.get("/colaboradores");
@@ -42,9 +41,4 @@ export async function calcularSalarioColaborador(id: number, payload: Record<str
     }
     throw err;
   }
-}
-
-export async function listarSalariosPorColaborador(id: number): Promise<SalaryRecord[]> {
-  const { data } = await api.get(`/colaboradores/${id}/salarios`);
-  return data;
 }

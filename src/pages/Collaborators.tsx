@@ -7,7 +7,6 @@ import { PageHeader } from "../components/ui/PageHeader";
 import CollaboratorForm from "../components/collaborators/CollaboratorForm";
 import ConfirmDialog from "../components/ui/ConfirmDialog";
 import SalaryCalcDialog from "../components/collaborators/SalaryCalcDialog";
-import SalaryHistoryDialog from "../components/collaborators/SalaryHistoryDialog";
 import { useCollaborators } from "../hooks/useCollaborators";
 import { useCollaborator } from "../hooks/useCollaborator";
 import { deletarColaborador } from "../services/colaboradorService";
@@ -20,7 +19,6 @@ export function Collaborators() {
     const { save } = useCollaborator(selectedId ?? undefined);
     const [openDelete, setOpenDelete] = useState(false);
     const [openCalc, setOpenCalc] = useState(false);
-    const [openHistory, setOpenHistory] = useState(false);
 
     function handleNewCollaborator() {
         setSelectedId(null);
@@ -91,7 +89,6 @@ export function Collaborators() {
                 workers={collaborators}
                 onView={(worker) => {
                     setSelectedId(worker.id);
-                    setOpenHistory(true);
                 }}
                 onEdit={handleEdit}
                 onDelete={(worker) => handleDelete(worker)}
@@ -128,11 +125,6 @@ export function Collaborators() {
                 }}
             />
             
-            <SalaryHistoryDialog
-                open={openHistory}
-                workerId={selectedId}
-                onClose={() => setOpenHistory(false)}
-            />
 
             {openForm && (
                 <div className="fixed inset-0 bg-black/30 flex items-center justify-center p-4">
