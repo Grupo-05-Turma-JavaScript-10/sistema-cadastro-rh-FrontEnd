@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import { Sidebar } from "./components/sidebar/Sidebar";
 import { Dashboard } from "./pages/Dashboard";
 import { Cargos } from "./pages/Positions";
@@ -31,7 +32,9 @@ function Layout() {
               : "flex flex-col w-full"
           }`}
         >
-          <Routes>
+
+          <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/cadastro" element={<RegisterForm />} />
@@ -52,6 +55,7 @@ function Layout() {
               }
             />
           </Routes>
+          </AnimatePresence>
         </div>
       </div>
 

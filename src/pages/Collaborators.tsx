@@ -5,6 +5,7 @@ import CollaboratorsTable from "../components/collaborators/CollaboratorsTable";
 import type Worker from "../models/Worker";
 import { SearchBar } from "../components/ui/SearchBar";
 import { PageHeader } from "../components/ui/PageHeader";
+import { PageTransition } from "../components/ui/PageTransition";
 
 export function Collaborators() {
     const [collaborators, setCollaborators] = useState<Worker[]>([]);
@@ -43,6 +44,7 @@ export function Collaborators() {
     }
 
     return (
+        <PageTransition>
         <div className="space-y-6">
 
             <PageHeader
@@ -76,5 +78,7 @@ export function Collaborators() {
             />
 
         </div>
+        </PageTransition>
     );
+
 }
