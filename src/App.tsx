@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import { Sidebar } from "./components/sidebar/Sidebar";
 import { Dashboard } from "./pages/Dashboard";
 import { Cargos } from "./pages/Positions";
@@ -7,15 +8,18 @@ import { Footer } from "./components/landing/Footer";
 import { Collaborators } from "./pages/Collaborators";
 import UsersPage from "./pages/Users";
 import { Login } from "./pages/Login";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { PrivateRoute } from "./routes/PrivateRoute";
-
+import { RegisterForm } from "./pages/Register";
+import { Settings } from "./pages/Settings";
 
 function Layout() {
   const location = useLocation();
+
   const isPublicPage =
-    location.pathname === "/" || location.pathname === "/login";
+    location.pathname === "/" ||
+    location.pathname === "/login" ||
+    location.pathname === "/cadastro";
+
+  const showFooter = location.pathname === "/";
 
   return (
     <div className="flex flex-col min-h-screen bg-background-light">
@@ -23,30 +27,40 @@ function Layout() {
         {!isPublicPage && <Sidebar />}
 
         <div
-          className={`flex-1 transition-all duration-300 ${!isPublicPage
+          className={`flex-1 transition-all duration-300 ${
+            !isPublicPage
               ? "ml-0 md:ml-64 p-4 md:p-8 pt-16 md:pt-8"
-              : "flex flex-col"
-            }`}
+              : "flex flex-col w-full"
+          }`}
         >
-          <Routes>
+
+          <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-            <Route path="/colaboradores" element={<PrivateRoute><Collaborators /></PrivateRoute>} />
-            <Route path="/cargos" element={<PrivateRoute><Cargos /></PrivateRoute>} />
-            <Route path="/usuarios" element={<PrivateRoute><UsersPage /></PrivateRoute>} />
-
-            
+            <Route path="/cadastro" element={<RegisterForm />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/colaboradores" element={<Collaborators />} />
+            <Route path="/cargos" element={<Cargos />} />
+            <Route path="/usuarios" element={<UsersPage />} />
+            <Route path="/configuracoes" element={<Settings />} />
 
             <Route
               path="*"
-              element={<div className="p-8">Página não encontrada</div>}
+              element={
+                <div className="flex items-center justify-center h-full min-h-[60vh]">
+                  <h1 className="text-xl font-bold text-corporate-slate">
+                    Página não encontrada
+                  </h1>
+                </div>
+              }
             />
           </Routes>
-          <ToastContainer position="top-right" autoClose={3000} />
+          </AnimatePresence>
         </div>
       </div>
-      {isPublicPage && <Footer />}
+
+      {showFooter && <Footer />}
     </div>
   );
 }

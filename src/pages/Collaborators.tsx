@@ -56,6 +56,7 @@ export function Collaborators() {
 
 
     return (
+        <PageTransition>
         <div className="space-y-6">
 
             <PageHeader
@@ -142,5 +143,7 @@ export function Collaborators() {
             )}
 
         </div>
+        </PageTransition>
     );
+
 }

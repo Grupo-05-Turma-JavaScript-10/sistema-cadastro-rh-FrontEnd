@@ -33,8 +33,6 @@ function UsersTable({ workers, onEdit, onDelete }: UsersTableProps) {
     };
   };
 
-
-
   return (
     <div>
       <div className="md:hidden space-y-4">
@@ -55,12 +53,14 @@ function UsersTable({ workers, onEdit, onDelete }: UsersTableProps) {
                     {worker.email}
                   </span>
                 </div>
+
                 <Badge variant={role.variant}>{role.label}</Badge>
               </div>
 
               <div className="flex items-center gap-2 text-sm bg-gray-50 p-2 rounded-md">
                 <ShieldIcon size={16} className="text-metallic-silver" />
-               <Badge variant={worker.status ? "success" : "danger"}>
+
+                <Badge variant={worker.status ? "success" : "neutral"}>
                   {worker.status ? "Ativo" : "Inativo"}
                 </Badge>
               </div>
@@ -73,7 +73,7 @@ function UsersTable({ workers, onEdit, onDelete }: UsersTableProps) {
                 >
                   <Pencil size={16} className="mr-2" /> Editar
                 </Button>
-                
+
                 <Button
                   variant="ghost"
                   onClick={() => onDelete?.(worker.id)}
@@ -126,7 +126,7 @@ function UsersTable({ workers, onEdit, onDelete }: UsersTableProps) {
                       </td>
 
                       <td className="p-4">
-                        <Badge variant={worker.status ? "success" : "danger"}>
+                        <Badge variant={worker.status ? "success" : "neutral"}>
                           {worker.status ? "Ativo" : "Inativo"}
                         </Badge>
                       </td>
@@ -141,7 +141,7 @@ function UsersTable({ workers, onEdit, onDelete }: UsersTableProps) {
                           >
                             <Pencil size={18} />
                           </Button>
-                          
+
                           <Button
                             variant="ghost"
                             onClick={() => onDelete?.(worker.id)}
@@ -163,4 +163,5 @@ function UsersTable({ workers, onEdit, onDelete }: UsersTableProps) {
     </div>
   );
 }
+
 export default UsersTable;

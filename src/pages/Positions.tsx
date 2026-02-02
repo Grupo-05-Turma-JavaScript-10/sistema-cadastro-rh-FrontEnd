@@ -37,6 +37,7 @@ export function Cargos() {
     }
 
     return (
+        <PageTransition>
         <div className="space-y-6">
             <PageHeader
                 title="Cargos & Estrutura"
@@ -113,5 +114,6 @@ export function Cargos() {
                 </div>
             )}
         </div>
+        </PageTransition>
     );
 }

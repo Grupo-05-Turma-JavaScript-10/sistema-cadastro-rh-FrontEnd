@@ -2,6 +2,7 @@ import { Users, Briefcase, UserPlus, TrendingUp } from "lucide-react";
 import { Card } from "../components/ui/Card";
 import { StatCard } from "../components/ui/StatCard";
 import { PageHeader } from "../components/ui/PageHeader";
+import { PageTransition } from "../components/ui/PageTransition";
 
 
 interface SummaryRowProps {
@@ -52,6 +53,7 @@ export function Dashboard() {
   };
 
   return (
+    <PageTransition>
     <div className="space-y-6">
       <PageHeader
         title="Bem-vindo ao Dashboard"
@@ -129,5 +131,6 @@ export function Dashboard() {
         </Card>
       </div>
     </div>
+    </PageTransition>
   );
 }
