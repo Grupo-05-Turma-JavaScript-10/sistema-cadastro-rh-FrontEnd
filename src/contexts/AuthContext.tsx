@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useEffect, useState, type ReactNode, type Dispatch, type SetStateAction} from "react";
 import { login } from "../services/Service";
 import type UsuarioLogin from "../models/UsuarioLogin";
 
@@ -8,6 +8,7 @@ interface AuthContextProps {
   handleLogout(): void;
   handleLogin(usuario: UsuarioLogin): Promise<void>;
   isLoading: boolean;
+  setUsuario: Dispatch<SetStateAction<UsuarioLogin>>;
 }
 
 interface AuthProviderProps {
@@ -70,7 +71,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
    return(
-    <AuthContext.Provider value={{usuario, handleLogin, handleLogout, isLoading}}>
+    <AuthContext.Provider value={{usuario, handleLogin, handleLogout, isLoading, setUsuario}}>
         {children}
     </AuthContext.Provider>
    )
