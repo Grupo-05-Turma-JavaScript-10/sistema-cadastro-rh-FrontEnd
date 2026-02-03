@@ -8,11 +8,12 @@ import { Card } from "../components/ui/Card";
 export function RegisterForm() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    companyName: "",
     adminName: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -23,6 +24,12 @@ export function RegisterForm() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
+    if (formData.password !== formData.confirmPassword) {
+      alert("As senhas não coincidem.");
+      setLoading(false);
+      return;
+    }
 
     const API_URL =
       "https://sistema-cadastro-rh-f16u.onrender.com/usuarios/cadastrar";
@@ -83,21 +90,6 @@ export function RegisterForm() {
         <form className="space-y-5" onSubmit={handleSubmit}>
           <div>
             <label className="text-sm font-semibold text-corporate-slate block mb-1.5">
-              Nome da Empresa
-            </label>
-            <input
-              type="text"
-              name="companyName"
-              placeholder="Minha Empresa Ltda"
-              value={formData.companyName}
-              onChange={handleChange}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-corporate-slate placeholder:text-gray-300 outline-none transition focus:border-primary-teal focus:ring-2 focus:ring-primary-teal/20"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="text-sm font-semibold text-corporate-slate block mb-1.5">
               Nome do Administrador
             </label>
             <input
@@ -130,11 +122,36 @@ export function RegisterForm() {
             <label className="text-sm font-semibold text-corporate-slate block mb-1.5">
               Senha
             </label>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="••••••••"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 pr-12 text-sm text-corporate-slate placeholder:text-gray-400 outline-none transition focus:border-primary-teal focus:ring-2 focus:ring-primary-teal/20"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute inset-y-0 right-2 my-auto rounded px-2 text-xs font-semibold text-primary-teal hover:brightness-90"
+                aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+              >
+                {showPassword ? "Ocultar" : "Mostrar"}
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label className="text-sm font-semibold text-corporate-slate block mb-1.5">
+              Confirmar Senha
+            </label>
             <input
-              type="password"
-              name="password"
+              type={showPassword ? "text" : "password"}
+              name="confirmPassword"
               placeholder="••••••••"
-              value={formData.password}
+              value={formData.confirmPassword}
               onChange={handleChange}
               className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-corporate-slate placeholder:text-gray-400 outline-none transition focus:border-primary-teal focus:ring-2 focus:ring-primary-teal/20"
               required
