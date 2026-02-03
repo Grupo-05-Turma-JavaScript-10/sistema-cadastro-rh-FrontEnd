@@ -1,26 +1,36 @@
 import type Position from "../models/Position";
-import { atualizar, buscar, cadastrar, deletar } from "./baseService";
+import api from "./api";
 
-export const listarCargos = async (setDados: Function, header: Object = {}) => {
-    await buscar("/cargos", setDados, header);
-};
+export async function listarCargos(): Promise<Position[]> {
+    const { data } = await api.get("/cargos");
+    return data;
+}
 
-export const buscarCargoPorId = async (id: number, setDados: Function, header: Object = {}) => {
-    await buscar(`/cargos/${id}`, setDados, header);
-};
+export async function buscarCargoPorId(id: number): Promise<Position> {
+    const { data } = await api.get(`/cargos/${id}`);
+    return data;
+}
 
-export const buscarCargosPorDescricao = async (descricao: string, setDados: Function, header: Object = {}) => {
-    await buscar(`/cargos/descricao/${descricao}`, setDados, header);
-};
+export async function buscarCargosPorDescricao(descricao: string): Promise<Position[]> {
+    const { data } = await api.get(`/cargos/descricao/${encodeURIComponent(descricao)}`);
+    return data;
+}
 
-export const criarCargo = async (cargo: Position, setDados: Function, header: Object = {}) => {
-    await cadastrar("/cargos", cargo, setDados, header);
-};
+export async function criarCargo(cargo: Position): Promise<Position> {
+    const { data } = await api.post("/cargos", cargo);
+    return data;
+}
 
-export const atualizarCargo = async (cargo: Position, setDados: Function, header: Object = {}) => {
-    await atualizar("/cargos", cargo, setDados, header);
-};
+export async function atualizarCargo(cargo: Position): Promise<Position> {
+    const { data } = await api.put("/cargos", cargo);
+    return data;
+}
 
-export const deletarCargo = async (id: number, header: Object = {}) => {
-    await deletar(`/cargos/${id}`, header);
-};
+export async function deletarCargo(id: number): Promise<void> {
+    await api.delete(`/cargos/${id}`);
+}
+
+export async function listarCargosAll(): Promise<Position[]> {
+    const { data } = await api.get("/cargos");
+    return data;
+}

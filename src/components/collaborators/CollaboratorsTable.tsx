@@ -1,21 +1,28 @@
-import { PencilIcon, EyeIcon } from "lucide-react"; 
+import { PencilIcon, TrashIcon, Calculator } from "lucide-react"; 
 import { Badge } from "../ui/Badge";
 import { Card } from "../ui/Card";
 import type Worker from "../../models/Worker";
 
 interface CollaboratorsTableProps {
   workers: Worker[];
-  onView?: (worker: Worker) => void;
   onEdit?: (worker: Worker) => void;
+  onDelete?: (worker: Worker) => void;
+  onCalculate?: (worker: Worker) => void;
 }
 
-export default function CollaboratorsTable({ workers, onView, onEdit }: CollaboratorsTableProps) {
+export default function CollaboratorsTable({ workers, onEdit, onDelete, onCalculate }: CollaboratorsTableProps) {
   
   const formatDate = (date: Date | string) => {
     if (!date) return "-";
     const d = new Date(date);
     return new Intl.DateTimeFormat('pt-BR').format(d);
   };
+  const toNumber = (value: unknown) => {
+    const n = typeof value === "number" ? value : Number(value);
+    return Number.isFinite(n) ? n : 0;
+  };
+  const formatCurrency = (value: unknown) =>
+    new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(toNumber(value));
 
   const getDepartment = (role: string) => {
     if (role.includes("Projetos") || role.includes("Desenvolvedor")) return "TI";
@@ -49,20 +56,27 @@ export default function CollaboratorsTable({ workers, onView, onEdit }: Collabor
             <div className="text-sm text-gray-600 bg-gray-50 p-2 rounded-md space-y-1">
               <p><span className="font-semibold">Dept:</span> {getDepartment(worker.cargo?.nome || "")}</p>
               <p><span className="font-semibold">Admissão:</span> {formatDate(worker.data_admissão)}</p>
+              <p><span className="font-semibold">Salário:</span> {formatCurrency(worker.salario)}</p>
             </div>
 
             <div className="flex items-center gap-2 pt-2 border-t border-gray-50 mt-1">
-              <button
-                onClick={() => onView?.(worker)}
-                className="flex-1 flex items-center justify-center gap-2 p-2 text-primary-teal hover:bg-primary-teal/10 rounded-md transition-colors text-sm font-medium"
-              >
-                <EyeIcon size={16} /> Ver
-              </button>
               <button
                 onClick={() => onEdit?.(worker)}
                 className="flex-1 flex items-center justify-center gap-2 p-2 text-primary-teal hover:bg-primary-teal/10 rounded-md transition-colors text-sm font-medium"
               >
                 <PencilIcon size={16} /> Editar
+              </button>
+              <button
+                onClick={() => onCalculate?.(worker)}
+                className="flex-1 flex items-center justify-center gap-2 p-2 text-primary-teal hover:bg-primary-teal/10 rounded-md transition-colors text-sm font-medium"
+              >
+                <Calculator size={16} /> Calcular
+              </button>
+              <button
+                onClick={() => onDelete?.(worker)}
+                className="flex-1 flex items-center justify-center gap-2 p-2 text-error-red hover:bg-error-red/10 rounded-md transition-colors text-sm font-medium"
+              >
+                <TrashIcon size={16} /> Excluir
               </button>
             </div>
           </div>
@@ -79,6 +93,7 @@ export default function CollaboratorsTable({ workers, onView, onEdit }: Collabor
                   <th className="p-4">Cargo</th>
                   <th className="p-4">Departamento</th>
                   <th className="p-4">Data de Admissão</th>
+                  <th className="p-4">Salário</th>
                   <th className="p-4">Status</th>
                   <th className="p-4 text-right pr-6">Ações</th>
                 </tr>
@@ -105,6 +120,9 @@ export default function CollaboratorsTable({ workers, onView, onEdit }: Collabor
                     <td className="p-4 text-gray-600">
                       {formatDate(worker.data_admissão)}
                     </td>
+                    <td className="p-4 text-gray-600">
+                      {formatCurrency(worker.salario)}
+                    </td>
 
                     <td className="p-4">
                       <Badge variant={worker.status ? "success" : "danger"}>
@@ -115,18 +133,25 @@ export default function CollaboratorsTable({ workers, onView, onEdit }: Collabor
                     <td className="p-4 text-right pr-6">
                       <div className="flex items-center justify-end gap-2">
                         <button
-                          onClick={() => onView?.(worker)}
-                          className="p-2 text-primary-teal hover:bg-primary-teal/10 rounded-md transition-colors"
-                          title="Visualizar"
-                        >
-                          <EyeIcon size={18} />
-                        </button>
-                        <button
                           onClick={() => onEdit?.(worker)}
                           className="p-2 text-primary-teal hover:bg-primary-teal/10 rounded-md transition-colors"
                           title="Editar"
                         >
                           <PencilIcon size={18} />
+                        </button>
+                        <button
+                          onClick={() => onCalculate?.(worker)}
+                          className="p-2 text-primary-teal hover:bg-primary-teal/10 rounded-md transition-colors"
+                          title="Calcular Salário"
+                        >
+                          <Calculator size={18} />
+                        </button>
+                        <button
+                          onClick={() => onDelete?.(worker)}
+                          className="p-2 text-error-red hover:bg-error-red/10 rounded-md transition-colors"
+                          title="Excluir"
+                        >
+                          <TrashIcon size={18} />
                         </button>
                       </div>
                     </td>
