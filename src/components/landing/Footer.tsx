@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export function Footer() {
   return (
     <footer className="bg-corporate-slate text-background-light border-t border-white/5 py-12 px-4 md:px-8 mt-auto">
@@ -62,28 +64,28 @@ export function Footer() {
           </h3>
           <ul className="space-y-3 text-sm">
             <li>
-              <a
-                href="/privacidade"
+              <Link
+                to="/privacidade"
                 className="text-metallic-silver hover:text-primary-teal transition-colors font-medium"
               >
                 Políticas de Privacidade
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/termos"
+              <Link
+                to="/termos"
                 className="text-metallic-silver hover:text-primary-teal transition-colors font-medium"
               >
                 Termos de Uso
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/cookies"
+              <Link
+                to="/cookies"
                 className="text-metallic-silver hover:text-primary-teal transition-colors font-medium"
               >
                 Cookies
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
