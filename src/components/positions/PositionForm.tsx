@@ -6,9 +6,10 @@ interface Props {
   initial?: Position | null;
   onSubmit: (payload: Position) => Promise<void> | void;
   onCancel?: () => void;
+  isLoading?: boolean; 
 }
 
-export default function PositionForm({ initial, onSubmit, onCancel }: Props) {
+export default function PositionForm({ initial, onSubmit, onCancel, isLoading }: Props) {
   const [form, setForm] = useState<Position>({
     id: 0,
     nome: "",
@@ -21,6 +22,12 @@ export default function PositionForm({ initial, onSubmit, onCancel }: Props) {
         id: initial.id ?? 0,
         nome: initial.nome ?? "",
         descricao: initial.descricao ?? "",
+      });
+    } else {
+      setForm({
+        id: 0,
+        nome: "",
+        descricao: "",
       });
     }
   }, [initial]);
@@ -35,34 +42,56 @@ export default function PositionForm({ initial, onSubmit, onCancel }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <label className="flex flex-col gap-1">
-          <span className="text-sm text-gray-600">Nome do Cargo</span>
+    <form onSubmit={handleSubmit} className="space-y-5">
+      
+      <div className="space-y-4">
+        
+        <div className="space-y-1.5">
+          <label className="text-sm font-semibold text-corporate-slate">
+            Nome do Cargo
+          </label>
           <input
-            className="border rounded p-2"
+            type="text"
+            className="w-full px-4 py-2 rounded-lg border border-gray-200 outline-none focus:border-primary-teal transition-colors text-corporate-slate placeholder:text-gray-400"
+            placeholder="Ex: Desenvolvedor Senior"
             value={form.nome}
             onChange={(e) => handleChange("nome", e.target.value)}
             required
+            disabled={isLoading}
           />
-        </label>
-        <label className="flex flex-col gap-1 md:col-span-2">
-          <span className="text-sm text-gray-600">Descrição</span>
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="text-sm font-semibold text-corporate-slate">
+            Descrição
+          </label>
           <textarea
-            className="border rounded p-2 h-24"
+            className="w-full px-4 py-2 rounded-lg border border-gray-200 outline-none focus:border-primary-teal transition-colors text-corporate-slate placeholder:text-gray-400 min-h-25 resize-none"
+            placeholder="Descreva as responsabilidades deste cargo..."
             value={form.descricao}
             onChange={(e) => handleChange("descricao", e.target.value)}
             required
+            disabled={isLoading}
           />
-        </label>
+        </div>
       </div>
-      <div className="flex justify-end gap-2">
+
+      <div className="flex justify-end gap-3 pt-2">
         {onCancel && (
-          <Button type="button" onClick={onCancel}>
+          <Button 
+            type="button" 
+            variant="ghost" 
+            onClick={onCancel}
+            disabled={isLoading}
+            className="text-gray-500 hover:text-corporate-slate hover:bg-gray-100"
+          >
             Cancelar
           </Button>
         )}
-        <Button type="submit">Salvar</Button>
+        
+        <Button type="submit" isLoading={isLoading}>
+          {initial?.id ? "Salvar Alterações" : "Criar Cargo"}
+        </Button>
       </div>
     </form>
   );
