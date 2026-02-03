@@ -1,12 +1,18 @@
+import { Link } from "react-router-dom";
+
 export function Footer() {
   return (
-    <footer className="bg-corporate-slate text-background-light border-t border-white/5 py-12 px-4 md:px-8 mt-auto">
+    <footer className="bg-gradient-to-br from-corporate-slate via-[#1a2e35] to-[#0f1a1e] text-background-light border-t border-white/5 py-12 px-4 md:px-8 mt-auto">
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2 cursor-pointer hover:opacity-90 transition-opacity">
-            <div className="bg-primary-teal w-8 h-8 rounded-lg flex items-center justify-center shadow-sm">
-              <div className="w-3.5 h-3.5 border-2 border-white rounded-[1px] transform rotate-45" />
+            {/* Novo logo C+ em CSS */}
+            <div className="bg-primary-teal w-10 h-10 rounded-xl flex items-center justify-center shadow-lg">
+              <span className="text-white text-xl font-extrabold -mt-0.5">
+                C+
+              </span>
             </div>
+            {/* Fim do novo logo */}
             <span className="text-xl font-bold text-white tracking-tight">
               Colab<span className="text-primary-teal">+</span>
             </span>
@@ -62,28 +68,28 @@ export function Footer() {
           </h3>
           <ul className="space-y-3 text-sm">
             <li>
-              <a
-                href="/privacidade"
+              <Link
+                to="/privacidade"
                 className="text-metallic-silver hover:text-primary-teal transition-colors font-medium"
               >
                 Políticas de Privacidade
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/termos"
+              <Link
+                to="/termos"
                 className="text-metallic-silver hover:text-primary-teal transition-colors font-medium"
               >
                 Termos de Uso
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/cookies"
+              <Link
+                to="/cookies"
                 className="text-metallic-silver hover:text-primary-teal transition-colors font-medium"
               >
                 Cookies
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
@@ -98,7 +104,7 @@ export function Footer() {
                 href="mailto:contato@colabplus.com"
                 className="group flex items-center gap-3 text-sm text-metallic-silver hover:text-primary-teal transition-colors"
               >
-                <span className="bg-white/5 p-2 rounded-lg group-hover:bg-primary-teal/20">
+                <span className="bg-white/10 p-2 rounded-lg group-hover:bg-primary-teal/20 backdrop-blur-sm transition-all">
                   📧
                 </span>
                 contato@colabplus.com
@@ -107,14 +113,14 @@ export function Footer() {
                 href="tel:+5511999999999"
                 className="group flex items-center gap-3 text-sm text-metallic-silver hover:text-primary-teal transition-colors"
               >
-                <span className="bg-white/5 p-2 rounded-lg group-hover:bg-primary-teal/20">
+                <span className="bg-white/10 p-2 rounded-lg group-hover:bg-primary-teal/20 backdrop-blur-sm transition-all">
                   📞
                 </span>
                 (11) 99999-9999
               </a>
             </div>
 
-            <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+            <div className="bg-white/5 p-4 rounded-xl border border-white/5 backdrop-blur-sm">
               <p className="text-[10px] text-primary-teal uppercase font-extrabold tracking-wider mb-1">
                 Suporte Ativo
               </p>
