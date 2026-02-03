@@ -14,6 +14,7 @@ export function Login() {
     usuario: "",
     senha: "",
   } as UsuarioLogin);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (usuario.token !== "") {
@@ -88,14 +89,22 @@ export function Login() {
                   <Lock size={18} />
                 </span>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   name="senha"
                   placeholder="••••••••"
                   value={usuarioLogin.senha}
                   onChange={atualizarEstado}
-                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50/30 outline-none transition-all focus:bg-white focus:border-primary-teal focus:ring-4 focus:ring-primary-teal/10 text-sm text-corporate-slate"
+                  className="w-full pl-10 pr-12 py-3 rounded-xl border border-gray-200 bg-gray-50/30 outline-none transition-all focus:bg-white focus:border-primary-teal focus:ring-4 focus:ring-primary-teal/10 text-sm text-corporate-slate"
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute inset-y-0 right-2 my-auto rounded px-2 text-xs font-semibold text-primary-teal hover:brightness-90"
+                  aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                >
+                  {showPassword ? "Ocultar" : "Mostrar"}
+                </button>
               </div>
             </div>
 
