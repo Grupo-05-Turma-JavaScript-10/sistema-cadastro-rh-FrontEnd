@@ -46,7 +46,7 @@ export function Navbar() {
             </Button>
           </Link>
           
-          <Link to="/register">
+          <Link to="/cadastro">
              <Button>Teste Grátis</Button>
           </Link>
         </div>
@@ -75,7 +75,9 @@ export function Navbar() {
           <a href="/login" className="block py-2 text-center font-semibold text-corporate-slate">
             Entrar
           </a>
-          <Button className="w-full">Teste Grátis</Button>
+          <Link to="/cadastro" onClick={() => setIsMenuOpen(false)}>
+            <Button className="w-full">Teste Grátis</Button>
+          </Link>
         </div>
       )}
     </nav>
