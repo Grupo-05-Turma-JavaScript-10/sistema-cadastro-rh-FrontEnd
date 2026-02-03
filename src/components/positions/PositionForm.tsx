@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type Position from "../../models/Position";
 import { Button } from "../ui/Button";
+import { Briefcase, AlignLeft } from "lucide-react";
 
 interface Props {
   initial?: Position | null;
@@ -41,42 +42,50 @@ export default function PositionForm({ initial, onSubmit, onCancel, isLoading }:
     await onSubmit(form);
   }
 
+  const inputContainerClass = "relative group";
+  const iconClass = "absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary-teal transition-colors";
+  const iconTextAreaClass = "absolute left-3 top-3 text-gray-400 group-focus-within:text-primary-teal transition-colors";
+  const inputClass = "w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 outline-none focus:border-primary-teal focus:ring-4 focus:ring-primary-teal/10 transition-all text-corporate-slate placeholder:text-gray-400";
+  const labelClass = "block text-sm font-semibold text-corporate-slate mb-1.5 ml-1";
+
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       
       <div className="space-y-4">
         
-        <div className="space-y-1.5">
-          <label className="text-sm font-semibold text-corporate-slate">
-            Nome do Cargo
-          </label>
-          <input
-            type="text"
-            className="w-full px-4 py-2 rounded-lg border border-gray-200 outline-none focus:border-primary-teal transition-colors text-corporate-slate placeholder:text-gray-400"
-            placeholder="Ex: Desenvolvedor Senior"
-            value={form.nome}
-            onChange={(e) => handleChange("nome", e.target.value)}
-            required
-            disabled={isLoading}
-          />
+        <div>
+          <label className={labelClass}>Nome do Cargo</label>
+          <div className={inputContainerClass}>
+            <Briefcase size={18} className={iconClass} />
+            <input
+              type="text"
+              className={inputClass}
+              placeholder="Ex: Desenvolvedor Senior"
+              value={form.nome}
+              onChange={(e) => handleChange("nome", e.target.value)}
+              required
+              disabled={isLoading}
+            />
+          </div>
         </div>
 
-        <div className="space-y-1.5">
-          <label className="text-sm font-semibold text-corporate-slate">
-            Descrição
-          </label>
-          <textarea
-            className="w-full px-4 py-2 rounded-lg border border-gray-200 outline-none focus:border-primary-teal transition-colors text-corporate-slate placeholder:text-gray-400 min-h-25 resize-none"
-            placeholder="Descreva as responsabilidades deste cargo..."
-            value={form.descricao}
-            onChange={(e) => handleChange("descricao", e.target.value)}
-            required
-            disabled={isLoading}
-          />
+        <div>
+          <label className={labelClass}>Descrição e Responsabilidades</label>
+          <div className={inputContainerClass}>
+            <AlignLeft size={18} className={iconTextAreaClass} />
+            <textarea
+              className={`${inputClass} min-h-30 resize-none`}
+              placeholder="Descreva as principais responsabilidades deste cargo..."
+              value={form.descricao}
+              onChange={(e) => handleChange("descricao", e.target.value)}
+              required
+              disabled={isLoading}
+            />
+          </div>
         </div>
       </div>
 
-      <div className="flex justify-end gap-3 pt-2">
+     <div className="flex justify-end gap-3 pt-4 border-t border-gray-50 mt-2">
         {onCancel && (
           <Button 
             type="button" 
