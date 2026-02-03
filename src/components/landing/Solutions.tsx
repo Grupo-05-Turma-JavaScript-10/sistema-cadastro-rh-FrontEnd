@@ -1,52 +1,83 @@
 import { Card } from "../ui/Card";
-import { Badge } from "../ui/Badge";
-import { Users, Layout, ShieldCheck } from "lucide-react";
+import { Check } from "lucide-react";
 
 export function Solutions() {
   const solutions = [
     {
-      title: "Gestão Estratégica",
+      number: "01",
+      title: "Centralização de Dados",
       description:
-        "Visualize toda a estrutura da sua empresa com organogramas dinâmicos.",
-      icon: <Layout className="w-6 h-6 text-emerald-500" />,
-      tag: "RH 4.0",
+        "Elimine planilhas espalhadas. Organize todas as informações dos colaboradores em um banco de dados único.",
+      features: [
+        "Perfil completo",
+        "Histórico de documentos",
+        "Busca dinâmica",
+      ],
     },
     {
-      title: "Segurança de Dados",
+      number: "02",
+      title: "Estrutura de Cargos",
       description:
-        "Controle permissões de acesso com níveis de segurança granulares.",
-      icon: <ShieldCheck className="w-6 h-6 text-emerald-500" />,
-      tag: "LGPD",
+        "Mantenha a hierarquia da empresa organizada e clara, facilitando a gestão de responsabilidades.",
+      features: [
+        "Organograma automatizado",
+        "Definição de competências",
+        "Planos de carreira",
+      ],
     },
     {
-      title: "Experiência do Colaborador",
+      number: "03",
+      title: "Controle de Acessos",
       description:
-        "Portal dedicado para atualização de dados e consulta de documentos.",
-      icon: <Users className="w-6 h-6 text-emerald-500" />,
-      tag: "Self-service",
+        "Segurança em primeiro lugar. Controle quem pode visualizar ou editar informações sensíveis do RH.",
+      features: [
+        "Níveis de permissão",
+        "Conformidade LGPD",
+        "Logs de atividades",
+      ],
     },
   ];
 
   return (
-    <section className="py-20 bg-slate-50">
-      <div className="container mx-auto px-4 text-center">
-        <Badge variant="brand">Nossas Soluções</Badge>
-        <h2 className="text-3xl font-bold text-slate-900 mb-12">
-          Tudo o que você precisa para escalar sua gestão
+    <section id="solucoes" className="bg-background-light py-24 px-4 md:px-8">
+      <div className="container mx-auto">
+        <h2 className="text-3xl md:text-4xl font-bold text-corporate-slate text-center mb-20 tracking-tight">
+          Simplifique a Gestão do seu RH
         </h2>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {solutions.map((item, index) => (
             <Card
               key={index}
-              className="p-8 hover:shadow-lg transition-shadow border-none bg-white"
+              className="flex flex-col items-start text-left bg-surface-white border-none shadow-sm hover:shadow-md transition-all duration-300 p-10 rounded-[2.5rem]"
             >
-              <div className="mb-4 flex justify-center">{item.icon}</div>
-              <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-              <p className="text-slate-600 text-sm mb-4">{item.description}</p>
-              <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded">
-                {item.tag}
-              </span>
+              <div className="w-16 h-16 rounded-2xl bg-primary-teal flex items-center justify-center mb-8 shadow-lg shadow-primary-teal/20">
+                <span className="text-white text-2xl font-bold">
+                  {item.number}
+                </span>
+              </div>
+
+              <h3 className="text-corporate-slate font-bold text-xl mb-4 leading-tight">
+                {item.title}
+              </h3>
+
+              <p className="text-metallic-silver font-medium text-sm mb-8 leading-relaxed">
+                {item.description}
+              </p>
+
+              <ul className="space-y-4 mb-10 flex-1">
+                {item.features.map((feature, fIndex) => (
+                  <li
+                    key={fIndex}
+                    className="flex items-center gap-3 text-corporate-slate font-medium text-sm"
+                  >
+                    <div className="bg-success-green/10 p-1 rounded-full">
+                      <Check className="w-3 h-3 text-success-green" />
+                    </div>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
             </Card>
           ))}
         </div>

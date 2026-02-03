@@ -11,8 +11,8 @@ export function LandingPage() {
         <Navbar />
         <main>
           <Hero />
-          <Features />
           <Solutions />
+          <Features />
         </main>
       </div>
     </PageTransition>
