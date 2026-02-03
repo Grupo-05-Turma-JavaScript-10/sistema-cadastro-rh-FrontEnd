@@ -89,6 +89,7 @@ export function Collaborators() {
 
             <CollaboratorsTable
                 workers={collaborators}
+                onEdit={handleEdit}
                 onDelete={(worker) => handleDelete(worker)}
                 onCalculate={(worker) => {
                     setSelectedId(worker.id);
