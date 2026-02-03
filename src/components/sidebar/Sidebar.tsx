@@ -1,5 +1,5 @@
-import { useState } from 'react'; 
-import { Link, useLocation } from 'react-router-dom';
+import { useState, useContext } from 'react'; 
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Users, 
@@ -10,12 +10,21 @@ import {
   Menu, 
   X     
 } from 'lucide-react';
+import { AuthContext } from '../../contexts/AuthContext';
 
 export function Sidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { handleLogout } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false); 
 
   const closeMenu = () => setIsOpen(false);
+
+  function onSignOut() {
+    handleLogout();
+    
+    navigate("/login");
+  }
 
   const getLinkStyle = (path: string) => {
     const isActive = location.pathname === path;
@@ -103,7 +112,7 @@ export function Sidebar() {
             </div>
           </div>
 
-          <button className="flex items-center gap-2 text-metallic-silver hover:text-error-red transition-colors text-sm w-full pl-2 cursor-pointer">
+          <button onClick={onSignOut} className="flex items-center gap-2 text-metallic-silver hover:text-error-red transition-colors text-sm w-full pl-2 cursor-pointer">
             <LogOut size={20} />
             <span>Sair</span>
           </button>
