@@ -8,115 +8,94 @@ import { StatCard } from "../components/ui/StatCard";
 import { SearchBar } from "../components/ui/SearchBar";
 import { PageHeader } from "../components/ui/PageHeader";
 import { PageTransition } from "../components/ui/PageTransition";
+import { listarColaboradores, atualizarColaborador } from "../services/colaboradorService";
 
 function Users() {
-    const [workers, setWorkers] = useState<Worker[]>([]);
+  const [workers, setWorkers] = useState<Worker[]>([]);
+  const [selectedWorker, setSelectedWorker] = useState<Worker | null>(null);
 
-    useEffect(() => {
-        // aqui futuramente entra o fetch da service/API
-        setWorkers([]);
-    }, []);
+  useEffect(() => {
+    listarColaboradores(setWorkers);
+  }, []);
 
-    useEffect(() => {
-        // MOCK TEMPORÁRIO PARA VISUALIZAÇÃO
-        const mockWorkers: Worker[] = [
-            {
-                id: 1,
-                nome: "Admin Master",
-                cpf: "000.000.000-00",
-                email: "admin@empresa.com",
-                data_admissão: new Date("2022-01-10"),
-                salario: 12000,
-                status: true,
-                cargo: {
-                    id: 1,
-                    nome: "Administrador do Sistema",
-                    descricao: "",
-                },
-                usuario: {
-                    idUsuario: 1,
-                    nome: "admin",
-                    senha: "",
-                    foto: "",
-                },
-            },
-            {
-                id: 2,
-                nome: "Admin Master 2",
-                cpf: "000.000.000-00",
-                email: "admin2@empresa.com",
-                data_admissão: new Date("2022-01-10"),
-                salario: 12000,
-                status: false,
-                cargo: {
-                    id: 1,
-                    nome: "Administrador do Sistema",
-                    descricao: "",
-                },
-                usuario: {
-                    idUsuario: 1,
-                    nome: "admin",
-                    senha: "",
-                    foto: "",
-                },
-            },
-        ];
+  // NOVO USUÁRIO (placeholder de modal)
+  function handleNewUser() {
+    alert("Aqui entra o modal/form de criação de usuário");
+  }
+  
+  function handleEdit(worker: Worker) {
+    setSelectedWorker(worker);
+    console.log("Editar usuário:", worker);
 
-        setWorkers(mockWorkers);
-    }, []);
+    // futuramente:
+    // abrir modal preenchido com selectedWorker
+  }
 
-    function handleNewUser() {
-        alert("Teste modal");
-    }
+  // REMOVER USUÁRIO (remove acesso, NÃO deleta colaborador)
+  function handleDelete(workerId: number) {
+    const worker = workers.find((w) => w.id === workerId);
+    if (!worker) return;
 
-    return (
-        <PageTransition>
-        <div className="space-y-6">
-            <PageHeader 
-                title="Usuários do Sistema" 
-                subtitle="Controle quem pode acessar e gerenciar o sistema"
-            >
-                <Button onClick={handleNewUser}>
-                    <Plus size={20} />
-                    Novo Usuário
-                </Button>
-            </PageHeader>
+    const workerSemUsuario: Worker = {
+      ...worker,
+      usuario: undefined,
+    };
 
-            <SearchBar
-                placeholder="Buscar por nome, e-mail ou perfil"
-                className="mb-6"
-            />
+    atualizarColaborador(workerSemUsuario, () => {
+      listarColaboradores(setWorkers);
+    });
+  }
 
-            <PermissionLevels />
+  return (
+    <PageTransition>
+      <div className="space-y-6">
+        <PageHeader
+          title="Usuários do Sistema"
+          subtitle="Controle quem pode acessar e gerenciar o sistema"
+        >
+          <Button onClick={handleNewUser}>
+            <Plus size={20} />
+            Novo Usuário
+          </Button>
+        </PageHeader>
 
-            <UsersTable
-                workers={workers}
-                onEdit={(worker) => console.log("Editar", worker)}
-                onDelete={(id) => console.log("Excluir", id)}
-            />
+        <SearchBar
+          placeholder="Buscar por nome, e-mail ou perfil"
+          className="mb-6"
+        />
 
-            <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                <StatCard
-                    title="Total de Usuários"
-                    value={workers.length}
-                    icon={UsersIcon}
-                />
-                <StatCard
-                    title="Usuários Ativos"
-                    value={workers.filter(w => w.status).length}
-                    variant="success"
-                    icon={CheckCircle2Icon}
-                />
-                <StatCard
-                    title="Administradores"
-                    value={workers.filter(w => w.usuario).length}
-                    variant="brand"
-                    icon={ShieldCheckIcon}
-                />
-            </section>
-        </div>
-        </PageTransition>
-    );
+        <PermissionLevels />
+
+        <UsersTable
+          workers={workers}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+
+        <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <StatCard
+            title="Total de Usuários"
+            value={workers.length}
+            icon={UsersIcon}
+          />
+
+          <StatCard
+            title="Usuários Ativos"
+            value={workers.filter((w) => w.status).length}
+            variant="success"
+            icon={CheckCircle2Icon}
+          />
+
+          <StatCard
+            title="Administradores"
+            value={workers.filter((w) => w.usuario).length}
+            variant="brand"
+            icon={ShieldCheckIcon}
+          />
+        </section>
+      </div>
+    </PageTransition>
+  );
 }
 
 export default Users;
