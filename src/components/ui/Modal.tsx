@@ -9,7 +9,6 @@ interface ModalProps {
 }
 
 export function Modal({ isOpen, onClose, title, children }: ModalProps) {
-
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -21,15 +20,15 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-corporate-slate/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
       
       <div className="absolute inset-0" onClick={onClose} />
 
-      <div className="bg-white w-full max-w-lg rounded-2xl p-6 shadow-2xl relative animate-in zoom-in-95 duration-200 z-10">
+      <div className="bg-surface-white w-full max-w-lg rounded-2xl p-6 shadow-2xl relative animate-in zoom-in-95 duration-200 z-10 border border-metallic-silver/20">
         
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-red-500 hover:bg-red-50 p-2 rounded-full transition-all"
+          className="absolute top-4 right-4 text-metallic-silver hover:text-error-red hover:bg-error-red/10 p-2 rounded-full transition-all"
           title="Fechar"
         >
           <X size={20} />

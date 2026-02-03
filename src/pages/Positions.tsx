@@ -13,7 +13,7 @@ import { usePositions } from "../hooks/usePositions";
 import { usePosition } from "../hooks/usePosition";
 import { deletarCargo } from "../services/cargoService";
 import { toast } from "react-toastify";
-
+import { Modal } from "../components/ui/Modal";
 
 export function Cargos() {
 
@@ -22,6 +22,7 @@ export function Cargos() {
     const [selected, setSelected] = useState<PositionModel | null>(null);
     const [openDelete, setOpenDelete] = useState(false);
     const { save } = usePosition();
+    const [isSaving, setIsSaving] = useState(false);
 
     const positions: Position[] = data.map((p) => ({
         id: p.id,
@@ -35,6 +36,20 @@ export function Cargos() {
     function handleNewPosition() {
         setSelected(null);
         setOpenForm(true);
+    }
+
+    async function handleSaveSubmit(payload: PositionModel) {
+        setIsSaving(true);
+        try {
+            await save(payload);
+            toast.success("Cargo salvo com sucesso!");
+            setOpenForm(false);
+            refetch();
+        } catch {
+            toast.error("Falha ao salvar cargo.")
+        } finally {
+            setIsSaving(false);
+        }
     }
 
     return (
@@ -91,30 +106,20 @@ export function Cargos() {
                 }}
             />
 
-            {openForm && (
-                <div className="fixed inset-0 bg-black/30 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
-                        <h3 className="text-lg font-semibold mb-4">
-                            {selected ? "Editar Cargo" : "Novo Cargo"}
-                        </h3>
-                        <PositionForm
-                            initial={selected ?? null}
-                            onSubmit={async (payload) => {
-                                try {
-                                    await save(payload as PositionModel);
-                                    toast.success("Cargo salvo com sucesso!");
-                                    setOpenForm(false);
-                                    refetch();
-                                } catch {
-                                    toast.error("Falha ao salvar cargo.");
-                                }
-                            }}
-                            onCancel={() => setOpenForm(false)}
-                        />
-                    </div>
-                </div>
-            )}
-        </div>
+            <Modal
+                    isOpen={openForm}
+                    onClose={() => setOpenForm(false)}
+                    title={selected ? "Editar Cargo" : "Novo Cargo"}
+                >
+                    <PositionForm
+                        initial={selected ?? null}
+                        onSubmit={handleSaveSubmit as any} 
+                        onCancel={() => setOpenForm(false)}
+                        isLoading={isSaving} 
+                    />
+                </Modal>
+
+            </div>
         </PageTransition>
     );
 }
