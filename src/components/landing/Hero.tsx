@@ -3,7 +3,7 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import React from "react";
 
 export function Hero() {
-  const dots = Array.from({ length: 30 });
+  const dots = Array.from({ length: 150 });
   const dashboardImgUrl =
     "https://ik.imagekit.io/k6kki72wv/Captura%20de%20tela%202026-02-03%20151852.png";
 
@@ -36,7 +36,7 @@ export function Hero() {
   };
 
   return (
-    <section className="relative min-h-screen overflow-hidden flex items-center py-32 lg:py-48 bg-gradient-to-br from-corporate-slate via-[#1a2e35] to-[#0f1a1e]">
+    <section className="relative min-h-screen overflow-hidden flex items-center py-32 lg:py-48 bg-linear-to-br from-corporate-slate via-[#1a2e35] to-[#0f1a1e]">
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         {dots.map((_, i) => {
           const size = Math.random() * 5 + 1;
@@ -97,14 +97,14 @@ export function Hero() {
             style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
             className="relative group cursor-pointer"
           >
-            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] p-2 md:p-3 shadow-2xl relative overflow-hidden transition-colors duration-500 group-hover:border-white/20">
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-4x1 p-2 md:p-3 shadow-2xl relative overflow-hidden transition-colors duration-500 group-hover:border-white/20">
               <img
                 src={dashboardImgUrl}
                 alt="Dashboard Colab+"
-                className="w-full h-auto rounded-[1.5rem] shadow-2xl"
+                className="w-full h-auto rounded-3x1 shadow-2xl"
                 style={{ transform: "translateZ(50px)" }}
               />
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+              <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-white/30 to-transparent" />
             </div>
 
             <motion.div
@@ -113,7 +113,7 @@ export function Hero() {
               className="absolute -bottom-6 -right-6 bg-primary-teal w-16 h-16 rounded-2xl flex items-center justify-center shadow-2xl z-20"
               style={{ transform: "translateZ(80px) rotate(45deg)" }}
             >
-              <div className="w-6 h-6 border-4 border-white rounded-[2px]" />
+              <div className="w-6 h-6 border-4 border-white rounded-xs" />
             </motion.div>
           </motion.div>
         </div>

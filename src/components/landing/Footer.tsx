@@ -2,17 +2,16 @@ import { Link } from "react-router-dom";
 
 export function Footer() {
   return (
-    <footer className="bg-gradient-to-br from-corporate-slate via-[#1a2e35] to-[#0f1a1e] text-background-light border-t border-white/5 py-12 px-4 md:px-8 mt-auto">
+    <footer className="bg-linear-to-br from-corporate-slate via-[#1a2e35] to-[#0f1a1e] text-background-light border-t border-white/5 py-12 px-4 md:px-8 mt-auto">
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2 cursor-pointer hover:opacity-90 transition-opacity">
-            {/* Novo logo C+ em CSS */}
             <div className="bg-primary-teal w-10 h-10 rounded-xl flex items-center justify-center shadow-lg">
               <span className="text-white text-xl font-extrabold -mt-0.5">
                 C+
               </span>
             </div>
-            {/* Fim do novo logo */}
+
             <span className="text-xl font-bold text-white tracking-tight">
               Colab<span className="text-primary-teal">+</span>
             </span>
@@ -41,14 +40,6 @@ export function Footer() {
                 className="text-metallic-silver hover:text-primary-teal transition-colors font-medium"
               >
                 Funcionalidades
-              </a>
-            </li>
-            <li>
-              <a
-                href="#clientes"
-                className="text-metallic-silver hover:text-primary-teal transition-colors font-medium"
-              >
-                Clientes
               </a>
             </li>
             <li>
