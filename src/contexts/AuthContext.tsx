@@ -28,6 +28,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [ready, setReady] = useState(false);
 
   async function handleLogin(usuarioLogin: UsuarioLogin) {
     setIsLoading(true);
@@ -54,13 +55,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
   useEffect(() => {
+    if (!ready) return;
     if (usuario.token) {
       const sanitized = usuario.token.replace(/^"+|"+$/g, "").trim();
       localStorage.setItem("token", sanitized);
     } else {
       localStorage.removeItem("token");
     }
-  }, [usuario.token]);
+  }, [usuario.token, ready]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -68,6 +70,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const sanitized = token.replace(/^"+|"+$/g, "").trim();
       setUsuario((prev) => ({ ...prev, token: sanitized }));
     }
+    setReady(true);
   }, []);
 
    return(
