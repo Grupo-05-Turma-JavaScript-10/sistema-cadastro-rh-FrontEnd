@@ -15,7 +15,7 @@ import { PageTransition } from "../components/ui/PageTransition";
 import { Modal } from "../components/ui/Modal";
 
 export function Collaborators() {
-    const { data: collaborators, query, setQuery, refetch, updateLocal } = useCollaborators();
+    const { data: collaborators, query, setQuery, refetch } = useCollaborators();
     const [openForm, setOpenForm] = useState(false);
     const [selectedId, setSelectedId] = useState<number | null>(null);
     const { save } = useCollaborator(selectedId ?? undefined);

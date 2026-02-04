@@ -1,7 +1,6 @@
 import { Pencil, Trash2, UsersIcon, MoreVertical } from "lucide-react";
 import { Card } from "../ui/Card";
 import type { BadgeVariant } from "../ui/Badge";
-import { Button } from "../ui/Button"; 
 import { useState } from "react";
 
 export interface Position {

@@ -13,7 +13,6 @@ import { Cargos } from "./pages/Positions";
 import { LandingPage } from "./pages/LandingPage";
 import { Footer } from "./components/landing/Footer";
 import { Collaborators } from "./pages/Collaborators";
-import UsersPage from "./pages/Users";
 import { Login } from "./pages/Login";
 import { RegisterForm } from "./pages/Register";
 import { Settings } from "./pages/Settings";

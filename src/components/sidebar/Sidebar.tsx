@@ -4,7 +4,6 @@ import {
   LayoutDashboard,
   Users,
   Briefcase,
-  UserCog,
   Settings,
   LogOut,
   User,

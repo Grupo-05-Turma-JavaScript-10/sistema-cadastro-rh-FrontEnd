@@ -14,11 +14,6 @@ interface CollaboratorsTableProps {
 export default function CollaboratorsTable({ workers, onEdit, onDelete, onCalculate }: CollaboratorsTableProps) {
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
   
-  const formatDate = (date: Date | string) => {
-    if (!date) return "-";
-    const d = new Date(date);
-    return new Intl.DateTimeFormat('pt-BR').format(d);
-  };
   const toNumber = (value: unknown) => {
     const n = typeof value === "number" ? value : Number(value);
     return Number.isFinite(n) ? n : 0;
