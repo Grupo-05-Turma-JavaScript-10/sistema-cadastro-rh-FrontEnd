@@ -1,21 +1,46 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export function Footer() {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
+  const handleBackToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleNavClick = (e: React.MouseEvent, targetId: string) => {
+    if (pathname === "/") {
+      e.preventDefault();
+      const element = document.getElementById(targetId);
+      if (element) {
+        const top = element.offsetTop - 80;
+        window.scrollTo({ top, behavior: "smooth" });
+      }
+    } else {
+      navigate(`/#${targetId}`);
+    }
+  };
+
   return (
-    <footer className="bg-linear-to-br from-corporate-slate via-[#1a2e35] to-[#0f1a1e] text-background-light border-t border-white/5 py-12 px-4 md:px-8 mt-auto">
+    <footer className="relative bg-linear-to-br from-corporate-slate via-[#1a2e35] to-[#0f1a1e] text-background-light py-12 px-4 md:px-8 mt-auto">
+      <div className="absolute top-0 left-0 right-0 h-[2px] bg-linear-to-r from-transparent via-primary-teal to-transparent opacity-70" />
+
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
         <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-2 cursor-pointer hover:opacity-90 transition-opacity">
+          <Link
+            to="/"
+            onClick={handleBackToTop}
+            className="flex items-center gap-2 cursor-pointer hover:opacity-90 transition-opacity w-fit"
+          >
             <div className="bg-primary-teal w-10 h-10 rounded-xl flex items-center justify-center shadow-lg">
               <span className="text-white text-xl font-extrabold -mt-0.5">
                 C+
               </span>
             </div>
-
             <span className="text-xl font-bold text-white tracking-tight">
               Colab<span className="text-primary-teal">+</span>
             </span>
-          </div>
+          </Link>
           <p className="text-sm text-metallic-silver leading-relaxed max-w-50 font-medium">
             Gestão de RH simplificada e eficiente para sua empresa.
           </p>
@@ -26,30 +51,21 @@ export function Footer() {
             Navegação
           </h3>
           <ul className="space-y-3 text-sm">
-            <li>
-              <a
-                href="#solucoes"
-                className="text-metallic-silver hover:text-primary-teal transition-colors font-medium"
-              >
-                Soluções
-              </a>
-            </li>
-            <li>
-              <a
-                href="#funcionalidades"
-                className="text-metallic-silver hover:text-primary-teal transition-colors font-medium"
-              >
-                Funcionalidades
-              </a>
-            </li>
-            <li>
-              <a
-                href="#recursos"
-                className="text-metallic-silver hover:text-primary-teal transition-colors font-medium"
-              >
-                Recursos
-              </a>
-            </li>
+            {[
+              { name: "Soluções", id: "solucoes" },
+              { name: "Funcionalidades", id: "funcionalidades" },
+              { name: "Recursos", id: "recursos" },
+            ].map((item) => (
+              <li key={item.id}>
+                <a
+                  href={`#${item.id}`}
+                  onClick={(e) => handleNavClick(e, item.id)}
+                  className="text-metallic-silver hover:text-primary-teal transition-colors font-medium cursor-pointer"
+                >
+                  {item.name}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -61,6 +77,7 @@ export function Footer() {
             <li>
               <Link
                 to="/privacidade"
+                onClick={handleBackToTop}
                 className="text-metallic-silver hover:text-primary-teal transition-colors font-medium"
               >
                 Políticas de Privacidade
@@ -69,6 +86,7 @@ export function Footer() {
             <li>
               <Link
                 to="/termos"
+                onClick={handleBackToTop}
                 className="text-metallic-silver hover:text-primary-teal transition-colors font-medium"
               >
                 Termos de Uso
@@ -77,6 +95,7 @@ export function Footer() {
             <li>
               <Link
                 to="/cookies"
+                onClick={handleBackToTop}
                 className="text-metallic-silver hover:text-primary-teal transition-colors font-medium"
               >
                 Cookies
@@ -85,57 +104,53 @@ export function Footer() {
           </ul>
         </div>
 
-        <div>
-          <h3 className="text-white font-bold mb-5 uppercase text-xs tracking-widest border-l-2 border-primary-teal pl-3">
+        <div className="flex flex-col gap-4">
+          <h3 className="text-white font-bold uppercase text-xs tracking-widest border-l-2 border-primary-teal pl-3">
             Canais de Atendimento
           </h3>
-          <div className="space-y-4">
-            <div className="flex flex-col gap-3">
-              <a
-                href="mailto:contato@colabplus.com"
-                className="group flex items-center gap-3 text-sm text-metallic-silver hover:text-primary-teal transition-colors"
-              >
-                <span className="bg-white/10 p-2 rounded-lg group-hover:bg-primary-teal/20 backdrop-blur-sm transition-all">
-                  📧
-                </span>
-                contato@colabplus.com
-              </a>
-              <a
-                href="tel:+5511999999999"
-                className="group flex items-center gap-3 text-sm text-metallic-silver hover:text-primary-teal transition-colors"
-              >
-                <span className="bg-white/10 p-2 rounded-lg group-hover:bg-primary-teal/20 backdrop-blur-sm transition-all">
-                  📞
-                </span>
-                (11) 99999-9999
-              </a>
-            </div>
-
-            <div className="bg-white/5 p-4 rounded-xl border border-white/5 backdrop-blur-sm">
-              <p className="text-[10px] text-primary-teal uppercase font-extrabold tracking-wider mb-1">
-                Suporte Ativo
-              </p>
-              <p className="text-xs text-white font-medium">
-                Segunda a Sexta — 08h às 18h
-              </p>
-            </div>
-
+          <div className="flex flex-col gap-3">
             <a
-              href="https://wa.me/5511999999999?text=Olá! Gostaria de falar com um especialista sobre o Colab+."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full bg-primary-teal text-white text-center text-xs font-bold py-3 rounded-lg hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-primary-teal/20"
+              href="mailto:contato@colabplus.com"
+              className="text-sm text-metallic-silver hover:text-primary-teal transition-colors flex items-center gap-2"
             >
-              Falar com um Especialista
+              <span className="bg-white/10 p-2 rounded-lg group-hover:bg-primary-teal/20 transition-all">
+                📧
+              </span>
+              contato@colabplus.com
+            </a>
+            <a
+              href="tel:+5511999999999"
+              className="text-sm text-metallic-silver hover:text-primary-teal transition-colors flex items-center gap-2"
+            >
+              <span className="bg-white/10 p-2 rounded-lg group-hover:bg-primary-teal/20 transition-all">
+                📞
+              </span>
+              (11) 99999-9999
             </a>
           </div>
+
+          <div className="bg-white/5 p-4 rounded-xl border border-white/5 backdrop-blur-sm">
+            <p className="text-[10px] text-primary-teal uppercase font-extrabold tracking-wider mb-1">
+              Suporte Ativo
+            </p>
+            <p className="text-xs text-white font-medium">
+              Segunda a Sexta — 08h às 18h
+            </p>
+          </div>
+
+          <a
+            href="https://wa.me/5511999999999"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full bg-primary-teal text-white text-center text-xs font-bold py-3 rounded-lg hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-primary-teal/20"
+          >
+            Falar com um Especialista
+          </a>
         </div>
       </div>
 
-      <div className="container mx-auto border-t border-white/10 mt-12 pt-8 flex flex-col items-center text-xs text-metallic-silver font-bold uppercase tracking-widest text-center">
-        <p>
-          © {new Date().getFullYear()} Colab+. Todos os direitos reservados.
-        </p>
+      <div className="container mx-auto border-t border-white/10 mt-12 pt-8 text-center text-xs text-metallic-silver font-bold uppercase tracking-widest">
+        <p>© 2026 COLAB+. TODOS OS DIREITOS RESERVADOS.</p>
       </div>
     </footer>
   );
