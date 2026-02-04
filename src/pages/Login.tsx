@@ -3,8 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import { AuthContext } from "../contexts/AuthContext";
 import type UsuarioLogin from "../models/UsuarioLogin";
-import { User, Lock } from "lucide-react"; 
+import { User, Lock } from "lucide-react";
 import { PageTransition } from "../components/ui/PageTransition";
+import { toast } from "react-toastify";
 
 export function Login() {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ export function Login() {
     usuario: "",
     senha: "",
   } as UsuarioLogin);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (usuario.token !== "") {
@@ -28,16 +30,19 @@ export function Login() {
     });
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    handleLogin(usuarioLogin);
-  }
 
+    try {
+      await handleLogin(usuarioLogin);
+    } catch (error) {
+      toast.error("Erro ao entrar. Verifique seu usuário e senha.");
+    }
+  }
   return (
-    <PageTransition> 
+    <PageTransition>
       <div className="min-h-screen bg-background-light flex items-center justify-center px-4 py-10">
         <div className="w-full max-w-md bg-white rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100 px-8 py-10">
-          
           <div className="flex flex-col items-center text-center">
             <div className="w-14 h-14 rounded-2xl bg-primary-teal text-white font-extrabold flex items-center justify-center shadow-lg shadow-primary-teal/20 text-xl">
               C+
@@ -83,19 +88,28 @@ export function Login() {
                   Esqueci minha senha
                 </Link>
               </div>
+
               <div className="relative group">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary-teal transition-colors">
                   <Lock size={18} />
                 </span>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   name="senha"
                   placeholder="••••••••"
                   value={usuarioLogin.senha}
                   onChange={atualizarEstado}
-                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50/30 outline-none transition-all focus:bg-white focus:border-primary-teal focus:ring-4 focus:ring-primary-teal/10 text-sm text-corporate-slate"
+                  className="w-full pl-10 pr-12 py-3 rounded-xl border border-gray-200 bg-gray-50/30 outline-none transition-all focus:bg-white focus:border-primary-teal focus:ring-4 focus:ring-primary-teal/10 text-sm text-corporate-slate"
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute inset-y-0 right-2 my-auto rounded px-2 text-xs font-semibold text-primary-teal hover:brightness-90"
+                  aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                >
+                  {showPassword ? "Ocultar" : "Mostrar"}
+                </button>
               </div>
             </div>
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
 
@@ -26,7 +27,7 @@ export function RegisterForm() {
     setLoading(true);
 
     if (formData.password !== formData.confirmPassword) {
-      alert("As senhas não coincidem.");
+      toast.error("As senhas não coincidem.");
       setLoading(false);
       return;
     }
@@ -43,7 +44,7 @@ export function RegisterForm() {
 
     try {
       await axios.post(API_URL, dadosUsuario);
-      alert("Cadastro realizado com sucesso!");
+      toast.success("Cadastro realizado com sucesso!");
       navigate("/login");
     } catch (error: any) {
       console.error("Erro na requisição:", error.response);
@@ -56,15 +57,17 @@ export function RegisterForm() {
         (typeof apiMessage === "string" &&
           apiMessage.toLowerCase().includes("existe"))
       ) {
-        alert(
+        toast.error(
           "Este e-mail já está cadastrado. Tente usar outro ou faça login.",
         );
       } else if (status === 400) {
-        alert(
+        toast.error(
           "Dados inválidos. Verifique se a senha atende aos requisitos mínimos.",
         );
       } else {
-        alert("Erro ao realizar cadastro. Verifique os dados e sua conexão.");
+        toast.error(
+          "Erro ao realizar cadastro. Verifique os dados e sua conexão.",
+        );
       }
     } finally {
       setLoading(false);

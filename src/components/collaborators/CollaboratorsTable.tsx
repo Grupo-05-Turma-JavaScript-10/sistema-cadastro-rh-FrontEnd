@@ -48,7 +48,7 @@ export default function CollaboratorsTable({ workers, onEdit, onDelete, onCalcul
                   {worker.cargo?.nome || "Sem cargo"}
                 </span>
               </div>
-              <Badge variant={worker.status ? "success" : "danger"}>
+              <Badge variant={worker.status ? "success" : "neutral"}>
                 {worker.status ? "Ativo" : "Inativo"}
               </Badge>
             </div>
@@ -125,7 +125,7 @@ export default function CollaboratorsTable({ workers, onEdit, onDelete, onCalcul
                     </td>
 
                     <td className="p-4">
-                      <Badge variant={worker.status ? "success" : "danger"}>
+                      <Badge variant={worker.status ? "success" : "neutral"}>
                         {worker.status ? "Ativo" : "Inativo"}
                       </Badge>
                     </td>

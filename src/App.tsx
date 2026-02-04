@@ -1,5 +1,12 @@
-import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
 import { Sidebar } from "./components/sidebar/Sidebar";
+import { Navbar } from "./components/landing/Navbar";
 import { Dashboard } from "./pages/Dashboard";
 import { Cargos } from "./pages/Positions";
 import { LandingPage } from "./pages/LandingPage";
@@ -9,6 +16,9 @@ import UsersPage from "./pages/Users";
 import { Login } from "./pages/Login";
 import { RegisterForm } from "./pages/Register";
 import { Settings } from "./pages/Settings";
+import { PrivacyPolicy } from "./pages/PrivacyPolicy";
+import { TermsOfService } from "./pages/TermsOfService";
+import { CookiePolicy } from "./pages/CookiePolicy";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import type { ReactNode } from "react";
@@ -16,12 +26,21 @@ import type { ReactNode } from "react";
 function Layout() {
   const location = useLocation();
 
-  const isPublicPage =
-    location.pathname === "/" ||
-    location.pathname === "/login" ||
-    location.pathname === "/cadastro";
+  const publicPaths = [
+    "/",
+    "/login",
+    "/cadastro",
+    "/privacidade",
+    "/termos",
+    "/cookies",
+  ];
+  const isPublicPage = publicPaths.includes(location.pathname);
 
-  const showFooter = location.pathname === "/";
+  const navbarPaths = ["/", "/privacidade", "/termos", "/cookies"];
+  const showNavbar = navbarPaths.includes(location.pathname);
+
+  const footerPaths = ["/", "/privacidade", "/termos", "/cookies"];
+  const showFooter = footerPaths.includes(location.pathname);
 
   function PrivateRoute({ children }: { children: ReactNode }) {
     const token = localStorage.getItem("token");
@@ -31,6 +50,8 @@ function Layout() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background-light">
+      {showNavbar && <Navbar />}
+
       <div className="flex flex-1">
         {!isPublicPage && <Sidebar />}
 
@@ -38,10 +59,9 @@ function Layout() {
           className={`flex-1 transition-all duration-300 ${
             !isPublicPage
               ? "ml-0 md:ml-64 p-4 md:p-8 pt-16 md:pt-8"
-              : "flex flex-col w-full"
+              : `flex flex-col w-full ${showNavbar ? "pt-20" : ""}`
           }`}
         >
-
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
