@@ -94,10 +94,10 @@ export function Sidebar() {
             <span>Cargos & Estrutura</span>
           </Link>
 
-          <Link to="/usuarios" onClick={closeMenu} className={getLinkStyle('/usuarios')}>
+          {/* <Link to="/usuarios" onClick={closeMenu} className={getLinkStyle('/usuarios')}>
             <UserCog size={22} />
             <span>Usuários do Sistema</span>
-          </Link>
+          </Link> */}
 
           <Link to="/configuracoes" onClick={closeMenu} className={getLinkStyle('/configuracoes')}>
             <Settings size={22} />

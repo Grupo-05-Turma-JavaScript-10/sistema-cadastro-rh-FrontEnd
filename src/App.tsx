@@ -66,50 +66,11 @@ function Layout() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/cadastro" element={<RegisterForm />} />
-            <Route path="/privacidade" element={<PrivacyPolicy />} />
-            <Route path="/termos" element={<TermsOfService />} />
-            <Route path="/cookies" element={<CookiePolicy />} />
-
-            <Route
-              path="/dashboard"
-              element={
-                <PrivateRoute>
-                  <Dashboard />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/colaboradores"
-              element={
-                <PrivateRoute>
-                  <Collaborators />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/cargos"
-              element={
-                <PrivateRoute>
-                  <Cargos />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/usuarios"
-              element={
-                <PrivateRoute>
-                  <UsersPage />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/configuracoes"
-              element={
-                <PrivateRoute>
-                  <Settings />
-                </PrivateRoute>
-              }
-            />
+            <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+            <Route path="/colaboradores" element={<PrivateRoute><Collaborators /></PrivateRoute>} />
+            <Route path="/cargos" element={<PrivateRoute><Cargos /></PrivateRoute>} />
+            {/* <Route path="/usuarios" element={<PrivateRoute><UsersPage /></PrivateRoute>} /> */}
+            <Route path="/configuracoes" element={<PrivateRoute><Settings /></PrivateRoute>} />
 
             <Route
               path="*"
