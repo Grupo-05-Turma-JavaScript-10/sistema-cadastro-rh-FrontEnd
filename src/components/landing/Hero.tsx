@@ -2,6 +2,7 @@ import { Button } from "../ui/Button";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import type { Variants } from "framer-motion";
 import React from "react";
+import { Link } from "react-router-dom";
 
 export function Hero() {
   const dots = Array.from({ length: 200 });
@@ -101,15 +102,20 @@ export function Hero() {
             variants={itemVariants}
             className="flex flex-col sm:flex-row gap-4"
           >
-            <Button className="px-10 py-4 text-lg rounded-xl shadow-lg shadow-primary-teal/20 transition-transform hover:scale-105 active:scale-95">
-              Começar Agora
-            </Button>
-            <Button
-              variant="outline"
-              className="px-10 py-4 text-lg rounded-xl border-white/20 text-white backdrop-blur-md hover:bg-white/10 transition-all"
-            >
-              Ver Demo
-            </Button>
+            <Link to="/cadastro">
+              <Button className="w-full sm:w-auto px-10 py-4 text-lg rounded-xl shadow-lg shadow-primary-teal/20 transition-transform hover:scale-105 active:scale-95">
+                Começar Agora
+              </Button>
+            </Link>
+
+            <Link to="/cadastro">
+              <Button
+                variant="outline"
+                className="w-full sm:w-auto px-10 py-4 text-lg rounded-xl border-white/20 text-white backdrop-blur-md hover:bg-white/10 transition-all"
+              >
+                Ver Demo
+              </Button>
+            </Link>
           </motion.div>
         </motion.div>
 
@@ -150,6 +156,11 @@ export function Hero() {
             </motion.div>
           </motion.div>
         </motion.div>
+      </div>
+
+      <div className="absolute bottom-0 left-0 right-0 h-[2px] z-50">
+        <div className="absolute inset-0 bg-linear-to-r from-transparent via-primary-teal to-transparent opacity-100" />
+        <div className="absolute inset-0 bg-linear-to-r from-transparent via-primary-teal to-transparent blur-[3px] opacity-60" />
       </div>
     </section>
   );
