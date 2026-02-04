@@ -111,19 +111,7 @@ export function Collaborators() {
                     open={openCalc}
                     onClose={() => setOpenCalc(false)}
                     worker={selectedId ? (collaborators.find(w => w.id === selectedId) ?? null) : null}
-                    onCalculate={async (payload) => {
-                        if (!selectedId) return;
-                        const { calcularSalarioColaborador } = await import("../services/colaboradorService");
-                        const res = await calcularSalarioColaborador(selectedId, payload);
-                        toast.success("Salário calculado com sucesso!");
-                        const anyRes = res as any;
-                        const salario = Number(anyRes?.salario ?? anyRes?.liquido ?? anyRes?.salarioCalculado);
-                        if (Number.isFinite(salario)) {
-                            updateLocal(selectedId, { salario });
-                            refetch();
-                        }
-                        return res;
-                    }}
+                
                 />
 
 
