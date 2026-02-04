@@ -3,6 +3,7 @@ import { Navbar } from "../components/landing/Navbar";
 import { Features } from "../components/landing/Features";
 import { Solutions } from "../components/landing/Solutions";
 import { PageTransition } from "../components/ui/PageTransition";
+import { Resources } from "../components/landing/Resources";
 
 export function LandingPage() {
   return (
@@ -13,6 +14,7 @@ export function LandingPage() {
           <Hero />
           <Solutions />
           <Features />
+          <Resources />
         </main>
       </div>
     </PageTransition>
