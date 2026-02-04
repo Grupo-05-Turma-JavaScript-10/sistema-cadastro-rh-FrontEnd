@@ -1,7 +1,8 @@
-import { PencilIcon, TrashIcon, Calculator } from "lucide-react"; 
+import { PencilIcon, TrashIcon, Calculator, MoreVertical } from "lucide-react"; 
 import { Badge } from "../ui/Badge";
 import { Card } from "../ui/Card";
 import type Worker from "../../models/Worker";
+import { useState } from "react";
 
 interface CollaboratorsTableProps {
   workers: Worker[];
@@ -11,6 +12,7 @@ interface CollaboratorsTableProps {
 }
 
 export default function CollaboratorsTable({ workers, onEdit, onDelete, onCalculate }: CollaboratorsTableProps) {
+  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
   
   const formatDate = (date: Date | string) => {
     if (!date) return "-";
@@ -24,12 +26,7 @@ export default function CollaboratorsTable({ workers, onEdit, onDelete, onCalcul
   const formatCurrency = (value: unknown) =>
     new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(toNumber(value));
 
-  const getDepartment = (role: string) => {
-    if (role.includes("Projetos") || role.includes("Desenvolvedor")) return "TI";
-    if (role.includes("Designer")) return "Design";
-    if (role.includes("RH")) return "RH";
-    return "Administrativo";
-  };
+  // departamento e data de admissão removidos da listagem
 
   return (
     <div>
@@ -54,30 +51,41 @@ export default function CollaboratorsTable({ workers, onEdit, onDelete, onCalcul
             </div>
 
             <div className="text-sm text-gray-600 bg-gray-50 p-2 rounded-md space-y-1">
-              <p><span className="font-semibold">Dept:</span> {getDepartment(worker.cargo?.nome || "")}</p>
-              <p><span className="font-semibold">Admissão:</span> {formatDate(worker.data_admissão)}</p>
               <p><span className="font-semibold">Salário:</span> {formatCurrency(worker.salario)}</p>
             </div>
 
-            <div className="flex items-center gap-2 pt-2 border-t border-gray-50 mt-1">
-              <button
-                onClick={() => onEdit?.(worker)}
-                className="flex-1 flex items-center justify-center gap-2 p-2 text-primary-teal hover:bg-primary-teal/10 rounded-md transition-colors text-sm font-medium"
-              >
-                <PencilIcon size={16} /> Editar
-              </button>
-              <button
-                onClick={() => onCalculate?.(worker)}
-                className="flex-1 flex items-center justify-center gap-2 p-2 text-primary-teal hover:bg-primary-teal/10 rounded-md transition-colors text-sm font-medium"
-              >
-                <Calculator size={16} /> Calcular
-              </button>
-              <button
-                onClick={() => onDelete?.(worker)}
-                className="flex-1 flex items-center justify-center gap-2 p-2 text-error-red hover:bg-error-red/10 rounded-md transition-colors text-sm font-medium"
-              >
-                <TrashIcon size={16} /> Excluir
-              </button>
+            <div className="pt-2 border-t border-gray-50 mt-1">
+              <div className="relative flex items-center justify-center">
+                <button
+                  onClick={() => setOpenMenuId(openMenuId === worker.id ? null : worker.id)}
+                  className="p-2 rounded-md hover:bg-gray-100 transition-colors text-corporate-slate"
+                  aria-label="Ações"
+                >
+                  <MoreVertical size={18} />
+                </button>
+                {openMenuId === worker.id && (
+                  <div className="absolute z-10 top-full mt-2 w-40 bg-white border border-gray-200 rounded-md shadow-md">
+                    <button
+                      onClick={() => { setOpenMenuId(null); onEdit?.(worker); }}
+                      className="w-full flex items-center gap-2 px-3 py-2 hover:bg-gray-50 text-sm text-corporate-slate"
+                    >
+                      <PencilIcon size={16} /> Editar
+                    </button>
+                    <button
+                      onClick={() => { setOpenMenuId(null); onCalculate?.(worker); }}
+                      className="w-full flex items-center gap-2 px-3 py-2 hover:bg-gray-50 text-sm text-corporate-slate"
+                    >
+                      <Calculator size={16} /> Calcular
+                    </button>
+                    <button
+                      onClick={() => { setOpenMenuId(null); onDelete?.(worker); }}
+                      className="w-full flex items-center gap-2 px-3 py-2 hover:bg-gray-50 text-sm text-error-red"
+                    >
+                      <TrashIcon size={16} /> Excluir
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         ))}
@@ -91,11 +99,9 @@ export default function CollaboratorsTable({ workers, onEdit, onDelete, onCalcul
                 <tr className="bg-gray-50 border-b border-gray-100 text-xs uppercase text-metallic-silver font-semibold">
                   <th className="p-4 pl-6">Nome</th>
                   <th className="p-4">Cargo</th>
-                  <th className="p-4">Departamento</th>
-                  <th className="p-4">Data de Admissão</th>
                   <th className="p-4">Salário</th>
                   <th className="p-4">Status</th>
-                  <th className="p-4 text-right pr-6">Ações</th>
+                  <th className="p-4 text-center">Ações</th>
                 </tr>
               </thead>
 
@@ -114,45 +120,45 @@ export default function CollaboratorsTable({ workers, onEdit, onDelete, onCalcul
                     </td>
 
                     <td className="p-4 text-gray-600">
-                      {getDepartment(worker.cargo?.nome || "")}
-                    </td>
-
-                    <td className="p-4 text-gray-600">
-                      {formatDate(worker.data_admissão)}
-                    </td>
-                    <td className="p-4 text-gray-600">
                       {formatCurrency(worker.salario)}
                     </td>
-
                     <td className="p-4">
                       <Badge variant={worker.status ? "success" : "neutral"}>
                         {worker.status ? "Ativo" : "Inativo"}
                       </Badge>
                     </td>
 
-                    <td className="p-4 text-right pr-6">
-                      <div className="flex items-center justify-end gap-2">
+                    <td className="p-4 text-center">
+                      <div className="relative inline-flex items-center justify-center">
                         <button
-                          onClick={() => onEdit?.(worker)}
-                          className="p-2 text-primary-teal hover:bg-primary-teal/10 rounded-md transition-colors"
-                          title="Editar"
+                          onClick={() => setOpenMenuId(openMenuId === worker.id ? null : worker.id)}
+                          className="p-2 rounded-md hover:bg-gray-100 transition-colors text-corporate-slate"
+                          title="Ações"
                         >
-                          <PencilIcon size={18} />
+                          <MoreVertical size={18} />
                         </button>
-                        <button
-                          onClick={() => onCalculate?.(worker)}
-                          className="p-2 text-primary-teal hover:bg-primary-teal/10 rounded-md transition-colors"
-                          title="Calcular Salário"
-                        >
-                          <Calculator size={18} />
-                        </button>
-                        <button
-                          onClick={() => onDelete?.(worker)}
-                          className="p-2 text-error-red hover:bg-error-red/10 rounded-md transition-colors"
-                          title="Excluir"
-                        >
-                          <TrashIcon size={18} />
-                        </button>
+                        {openMenuId === worker.id && (
+                          <div className="absolute z-10 top-full mt-2 right-0 w-44 bg-white border border-gray-200 rounded-md shadow-md">
+                            <button
+                              onClick={() => { setOpenMenuId(null); onEdit?.(worker); }}
+                              className="w-full flex items-center gap-2 px-3 py-2 hover:bg-gray-50 text-sm text-corporate-slate"
+                            >
+                              <PencilIcon size={16} /> Editar
+                            </button>
+                            <button
+                              onClick={() => { setOpenMenuId(null); onCalculate?.(worker); }}
+                              className="w-full flex items-center gap-2 px-3 py-2 hover:bg-gray-50 text-sm text-corporate-slate"
+                            >
+                              <Calculator size={16} /> Calcular
+                            </button>
+                            <button
+                              onClick={() => { setOpenMenuId(null); onDelete?.(worker); }}
+                              className="w-full flex items-center gap-2 px-3 py-2 hover:bg-gray-50 text-sm text-error-red"
+                            >
+                              <TrashIcon size={16} /> Excluir
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </td>
                   </tr>

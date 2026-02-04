@@ -6,8 +6,8 @@ import type Worker from "../../models/Worker";
 interface Props {
   open: boolean;
   onClose: () => void;
-  onCalculate: (payload: Record<string, unknown>) => Promise<any> | any;
   worker?: Worker | null;
+  onCalculate?: (payload: Record<string, unknown>) => Promise<any> | any;
 }
 
 export default function SalaryCalcDialog({ open, onClose, onCalculate, worker }: Props) {
@@ -19,18 +19,34 @@ export default function SalaryCalcDialog({ open, onClose, onCalculate, worker }:
   }, [worker]);
   const [bonus, setBonus] = useState<number>(0);
   const [descontos, setDescontos] = useState<number>(0);
+  const [bonusInput, setBonusInput] = useState<string>(new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(0));
+  const [descontosInput, setDescontosInput] = useState<string>(new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(0));
   const [result, setResult] = useState<number | null>(null);
   const preview = useMemo(() => {
     const bruto = horasTrabalhadas * valorHora + bonus - descontos;
     return Number.isFinite(bruto) ? bruto : 0;
   }, [horasTrabalhadas, valorHora, bonus, descontos]);
+  function parseCurrencyInput(value: string) {
+    const digits = value.replace(/\D/g, "");
+    const num = Number(digits) / 100;
+    return Number.isFinite(num) ? num : 0;
+  }
+  function formatBRL(n: number) {
+    return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n || 0);
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const res = await onCalculate({ horasTrabalhadas, valorHora, bonus, descontos });
-    const anyRes = res as any;
-    const salario = Number(anyRes?.salario ?? anyRes?.liquido ?? anyRes?.salarioCalculado);
+    const payload = { horasTrabalhadas, valorHora, bonus, descontos };
+    const salario = horasTrabalhadas * valorHora + bonus - descontos;
     setResult(Number.isFinite(salario) ? salario : null);
+    if (onCalculate) {
+      try {
+        await onCalculate(payload);
+      } catch {
+        // ignore backend errors; local result is authoritative
+      }
+    }
   }
 
   return (
@@ -58,8 +74,9 @@ export default function SalaryCalcDialog({ open, onClose, onCalculate, worker }:
             <span className="text-sm text-gray-600">Valor Hora (base/220)</span>
             <input
               type="number"
+              step="0.01"
               className="border rounded p-2"
-              value={valorHora}
+              value={valorHora.toFixed(2)}
               readOnly
             />
           </label>
@@ -77,19 +94,27 @@ export default function SalaryCalcDialog({ open, onClose, onCalculate, worker }:
           <label className="flex flex-col gap-1">
             <span className="text-sm text-gray-600">Bônus</span>
             <input
-              type="number"
+              type="text"
               className="border rounded p-2"
-              value={bonus}
-              onChange={(e) => setBonus(Number(e.target.value))}
+              value={bonusInput}
+              onChange={(e) => {
+                const num = parseCurrencyInput(e.target.value);
+                setBonus(num);
+                setBonusInput(formatBRL(num));
+              }}
             />
           </label>
           <label className="flex flex-col gap-1">
             <span className="text-sm text-gray-600">Descontos</span>
             <input
-              type="number"
+              type="text"
               className="border rounded p-2"
-              value={descontos}
-              onChange={(e) => setDescontos(Number(e.target.value))}
+              value={descontosInput}
+              onChange={(e) => {
+                const num = parseCurrencyInput(e.target.value);
+                setDescontos(num);
+                setDescontosInput(formatBRL(num));
+              }}
             />
           </label>
         </div>
