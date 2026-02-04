@@ -5,7 +5,7 @@ import { Card } from "../components/ui/Card";
 import { StatCard } from "../components/ui/StatCard";
 import { PageHeader } from "../components/ui/PageHeader";
 import { PageTransition } from "../components/ui/PageTransition";
-import type Worker from "../models/Worker";
+import type Worker from "../models/Worker"; 
 import { listarColaboradores } from "../services/colaboradorService";
 
 interface SummaryRowProps {
@@ -56,13 +56,20 @@ export function Dashboard() {
   const colaboradoresAtivos = colaboradores.filter((c) => c.status === true).length;
   const colaboradoresInativos = totalColaboradores - colaboradoresAtivos;
 
-  const cargosAtivos = colaboradores.filter(c => c.cargo != null).length;
+
+  const cargosAtivos = Array.from(
+    new Set(
+      colaboradores
+        .map(c => c.cargo?.nome) 
+        .filter(Boolean)         
+    )
+  ).length;
 
   const usuariosDoSistema = colaboradores.filter((c) => {
     return typeof c.email === "string" && c.email !== "" && c.email.includes("@") && c.email.includes(".");
   }).length;
 
-  const novosEsteMes = 5;
+  const novosEsteMes = 7;
   const taxaCrescimento = "5.2%";
 
   const atividadesRecentes = [
