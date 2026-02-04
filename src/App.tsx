@@ -49,7 +49,7 @@ function Layout() {
             <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
             <Route path="/colaboradores" element={<PrivateRoute><Collaborators /></PrivateRoute>} />
             <Route path="/cargos" element={<PrivateRoute><Cargos /></PrivateRoute>} />
-            <Route path="/usuarios" element={<PrivateRoute><UsersPage /></PrivateRoute>} />
+            {/* <Route path="/usuarios" element={<PrivateRoute><UsersPage /></PrivateRoute>} /> */}
             <Route path="/configuracoes" element={<PrivateRoute><Settings /></PrivateRoute>} />
 
             <Route
