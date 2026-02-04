@@ -72,20 +72,22 @@ export function Collaborators() {
 
                 </PageHeader>
 
-                <div className="flex flex-col md:flex-row gap-3">
+                <div className="flex flex-col md:flex-row gap-4 mb-6">
 
-                    <SearchBar
-                        placeholder="Buscar por nome, cargo ou departamento..."
-                        className="mb-6"
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                    />
+                    <div className="flex-1">
+                        <SearchBar
+                            placeholder="Buscar por nome, cargo ou departamento..."
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                            className="w-full"
+                        />
+                    </div>
 
-
-                    <button className="flex items-center gap-2 px-4 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors font-medium text-sm">
+                    <button className="flex items-center justify-center gap-2 px-4 py-4 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors font-medium text-sm h-full md:w-auto w-full">
                         <FilterIcon size={18} />
                         Filtros
                     </button>
+
                 </div>
 
 
