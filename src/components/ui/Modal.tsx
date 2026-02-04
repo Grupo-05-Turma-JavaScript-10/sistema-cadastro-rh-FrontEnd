@@ -24,7 +24,7 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
       
       <div className="absolute inset-0" onClick={onClose} />
 
-      <div className="bg-surface-white w-full max-w-lg rounded-2xl p-6 shadow-2xl relative animate-in zoom-in-95 duration-200 z-10 border border-metallic-silver/20">
+      <div className="bg-surface-white w-full max-w-screen-md lg:max-w-screen-lg max-h-[85vh] overflow-y-auto px-4 md:px-6 py-6 rounded-2xl shadow-2xl relative animate-in zoom-in-95 duration-200 z-10 border border-metallic-silver/20">
         
         <button 
           onClick={onClose}

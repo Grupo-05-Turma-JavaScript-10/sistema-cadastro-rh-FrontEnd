@@ -113,7 +113,7 @@ const [isLoading, setIsLoading] = useState(false);
   }
   const inputContainerClass = "relative group";
   const iconClass = "absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary-teal transition-colors";
-  const inputClass = "w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 outline-none focus:border-primary-teal focus:ring-4 focus:ring-primary-teal/10 transition-all text-corporate-slate placeholder:text-gray-400";
+  const inputClass = "w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 outline-none focus:border-primary-teal focus:ring-4 focus:ring-primary-teal/10 transition-all text-corporate-slate placeholder:text-gray-400";
   const labelClass = "block text-sm font-semibold text-corporate-slate mb-1.5 ml-1";
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -123,9 +123,9 @@ const [isLoading, setIsLoading] = useState(false);
           Dados Pessoais
         </h4>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
 
-          <div className="md:col-span-2">
+          <div className="lg:col-span-2">
             <label className={labelClass}>Nome Completo</label>
             <div className={inputContainerClass}>
               <User size={18} className={iconClass} />
@@ -175,9 +175,9 @@ const [isLoading, setIsLoading] = useState(false);
           Dados Contratuais
         </h4>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           
-          <div className="md:col-span-2">
+          <div className="lg:col-span-2">
             <label className={labelClass}>Cargo / Função</label>
             <div className={inputContainerClass}>
               <Briefcase size={18} className={iconClass} />
@@ -253,7 +253,7 @@ const [isLoading, setIsLoading] = useState(false);
         </div>
         </div>
 
-      <div className="flex justify-end gap-3 pt-4 border-t border-gray-50">
+      <div className="flex justify-end gap-3 pt-4 border-t border-gray-50 flex-wrap">
         {onCancel && (
           <Button
             type="button"
