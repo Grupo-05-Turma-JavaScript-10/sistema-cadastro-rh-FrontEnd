@@ -76,10 +76,11 @@ export function Collaborators() {
 
                     <SearchBar
                         placeholder="Buscar por nome, cargo ou departamento..."
-                        className="flex-1"
+                        className="mb-6"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                     />
+
 
                     <button className="flex items-center gap-2 px-4 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors font-medium text-sm">
                         <FilterIcon size={18} />
@@ -111,7 +112,7 @@ export function Collaborators() {
                     open={openCalc}
                     onClose={() => setOpenCalc(false)}
                     worker={selectedId ? (collaborators.find(w => w.id === selectedId) ?? null) : null}
-                
+
                 />
 
 
