@@ -5,6 +5,7 @@ import {
   useLocation,
   Navigate,
 } from "react-router-dom";
+import { useEffect } from "react";
 import { Sidebar } from "./components/sidebar/Sidebar";
 import { Navbar } from "./components/landing/Navbar";
 import { Dashboard } from "./pages/Dashboard";
@@ -25,6 +26,10 @@ import type { ReactNode } from "react";
 
 function Layout() {
   const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   const publicPaths = [
     "/",

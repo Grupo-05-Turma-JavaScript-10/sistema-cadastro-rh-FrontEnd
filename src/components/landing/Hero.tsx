@@ -1,9 +1,11 @@
 import { Button } from "../ui/Button";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import type { Variants } from "framer-motion";
 import React from "react";
+import { Link } from "react-router-dom";
 
 export function Hero() {
-  const dots = Array.from({ length: 150 });
+  const dots = Array.from({ length: 200 });
   const dashboardImgUrl =
     "https://ik.imagekit.io/k6kki72wv/Captura%20de%20tela%202026-02-03%20151852.png";
 
@@ -18,14 +20,8 @@ export function Hero() {
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-
+    const xPct = (e.clientX - rect.left) / rect.width - 0.5;
+    const yPct = (e.clientY - rect.top) / rect.height - 0.5;
     x.set(xPct);
     y.set(yPct);
   };
@@ -33,6 +29,23 @@ export function Hero() {
   const handleMouseLeave = () => {
     x.set(0);
     y.set(0);
+  };
+
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.15, delayChildren: 0.3 },
+    },
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] },
+    },
   };
 
   return (
@@ -59,35 +72,57 @@ export function Hero() {
       </div>
 
       <div className="container mx-auto px-4 md:px-8 flex flex-col lg:flex-row items-center gap-12 lg:gap-20 relative z-10">
-        <div className="flex-1 text-left">
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.1] tracking-tight mb-6">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="flex-1 text-left"
+        >
+          <motion.h1
+            variants={itemVariants}
+            className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.1] tracking-tight mb-6"
+          >
             Centralize e <br />
             <span className="text-white">Simplifique a Gestão</span> <br />
             do seu RH com o <br />
             <span className="inline-flex items-center">
               Colab<span className="text-primary-teal">+</span>
             </span>
-          </h1>
+          </motion.h1>
 
-          <p className="text-white text-base md:text-lg font-medium max-w-xl mb-10 leading-relaxed opacity-90">
+          <motion.p
+            variants={itemVariants}
+            className="text-white text-base md:text-lg font-medium max-w-xl mb-10 leading-relaxed opacity-90"
+          >
             Sistema desenvolvido para organizar as informações dos
             colaboradores, estruturar cargos e controlar acessos em um só lugar.
-          </p>
+          </motion.p>
 
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button className="px-10 py-4 text-lg rounded-xl shadow-lg shadow-primary-teal/20 transition-transform hover:scale-105">
-              Começar Agora
-            </Button>
-            <Button
-              variant="outline"
-              className="px-10 py-4 text-lg rounded-xl border-white/20 text-white backdrop-blur-md hover:bg-white/10"
-            >
-              Ver Demo
-            </Button>
-          </div>
-        </div>
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-col sm:flex-row gap-4"
+          >
+            <Link to="/cadastro">
+              <Button className="w-full sm:w-auto px-10 py-4 text-lg rounded-xl shadow-lg shadow-primary-teal/20 transition-transform hover:scale-105 active:scale-95">
+                Começar Agora
+              </Button>
+            </Link>
 
-        <div
+            <Link to="/cadastro">
+              <Button
+                variant="outline"
+                className="w-full sm:w-auto px-10 py-4 text-lg rounded-xl border-white/20 text-white backdrop-blur-md hover:bg-white/10 transition-all"
+              >
+                Ver Demo
+              </Button>
+            </Link>
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9, x: 50 }}
+          animate={{ opacity: 1, scale: 1, x: 0 }}
+          transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
           className="flex-1 w-full relative"
           style={{ perspective: "1200px" }}
         >
@@ -97,26 +132,35 @@ export function Hero() {
             style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
             className="relative group cursor-pointer"
           >
-            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-4x1 p-2 md:p-3 shadow-2xl relative overflow-hidden transition-colors duration-500 group-hover:border-white/20">
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-2 md:p-3 shadow-2xl relative overflow-hidden transition-colors duration-500 group-hover:border-white/20">
               <img
                 src={dashboardImgUrl}
                 alt="Dashboard Colab+"
-                className="w-full h-auto rounded-3x1 shadow-2xl"
+                className="w-full h-auto rounded-[2rem] shadow-2xl"
                 style={{ transform: "translateZ(50px)" }}
               />
               <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-white/30 to-transparent" />
             </div>
 
             <motion.div
-              animate={{ rotate: 45, scale: [1, 1.1, 1] }}
-              transition={{ repeat: Infinity, duration: 3 }}
+              animate={{
+                rotate: 45,
+                scale: [1, 1.1, 1],
+                y: [0, -10, 0],
+              }}
+              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
               className="absolute -bottom-6 -right-6 bg-primary-teal w-16 h-16 rounded-2xl flex items-center justify-center shadow-2xl z-20"
               style={{ transform: "translateZ(80px) rotate(45deg)" }}
             >
               <div className="w-6 h-6 border-4 border-white rounded-xs" />
             </motion.div>
           </motion.div>
-        </div>
+        </motion.div>
+      </div>
+
+      <div className="absolute bottom-0 left-0 right-0 h-[2px] z-50">
+        <div className="absolute inset-0 bg-linear-to-r from-transparent via-primary-teal to-transparent opacity-100" />
+        <div className="absolute inset-0 bg-linear-to-r from-transparent via-primary-teal to-transparent blur-[3px] opacity-60" />
       </div>
     </section>
   );
