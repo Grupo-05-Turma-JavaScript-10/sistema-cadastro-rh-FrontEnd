@@ -1,10 +1,10 @@
 import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
+import api from "../services/api";
 
 export function RegisterForm() {
   const navigate = useNavigate();
@@ -32,9 +32,6 @@ export function RegisterForm() {
       return;
     }
 
-    const API_URL =
-      "https://sistema-cadastro-rh-f16u.onrender.com/usuarios/cadastrar";
-
     const dadosUsuario = {
       nome: formData.adminName,
       usuario: formData.email,
@@ -43,7 +40,7 @@ export function RegisterForm() {
     };
 
     try {
-      await axios.post(API_URL, dadosUsuario);
+      await api.post("/usuarios/cadastrar", dadosUsuario);
       toast.success("Cadastro realizado com sucesso!");
       navigate("/login");
     } catch (error: any) {

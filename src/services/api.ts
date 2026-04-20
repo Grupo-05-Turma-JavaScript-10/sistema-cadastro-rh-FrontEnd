@@ -1,7 +1,20 @@
 import axios from "axios";
 
+const defaultProd = "https://sistema-cadastro-rh-f16u.onrender.com";
+const defaultDev = "http://localhost:4000";
+const env = import.meta.env as unknown as {
+    DEV?: boolean;
+    VITE_API_BASE_URL?: string;
+    VITE_API_URL?: string;
+    VITE_API_BASE_URL_PROD?: string;
+};
+const baseURL =
+    env.VITE_API_BASE_URL ||
+    env.VITE_API_URL ||
+    (env.DEV ? defaultDev : (env.VITE_API_BASE_URL_PROD || defaultProd));
+
 const api = axios.create({
-    baseURL: "https://sistema-cadastro-rh-f16u.onrender.com",
+    baseURL,
 });
 
 api.interceptors.request.use((config) => {

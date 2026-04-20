@@ -11,4 +11,12 @@ export default interface Worker {
     status: boolean;
     cargo?: Position;
     usuario?: User;
+    dataFimExperiencia?: string;
+    dataVencimentoAso?: string;
+    dataLimiteFerias?: string;
+    pacoteBeneficio?: { id: number; nome?: string; valorTotal?: number };
+    tipoContrato?: "CLT" | "PJ" | "ESTAGIO";
+    encargos?: number;
+    encargosMensais?: number;
+    custoTotal?: number;
 }

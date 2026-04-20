@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PlusIcon, FilterIcon } from "lucide-react";
+import { PlusIcon, FilterIcon, Download } from "lucide-react";
 import { Button } from "../components/ui/Button";
 import CollaboratorsTable from "../components/collaborators/CollaboratorsTable";
 import { SearchBar } from "../components/ui/SearchBar";
@@ -10,6 +10,7 @@ import SalaryCalcDialog from "../components/collaborators/SalaryCalcDialog";
 import { useCollaborators } from "../hooks/useCollaborators";
 import { useCollaborator } from "../hooks/useCollaborator";
 import { deletarColaborador } from "../services/colaboradorService";
+import api from "../services/api";
 import { toast } from "react-toastify";
 import { PageTransition } from "../components/ui/PageTransition";
 import { Modal } from "../components/ui/Modal";
@@ -56,6 +57,30 @@ export function Collaborators() {
         setOpenDelete(true);
     }
 
+    async function handleExportCSV() {
+        try {
+            const response = await api.get('/colaboradores/exportar/csv', {
+                responseType: 'blob' // Importante para lidar com o arquivo retornado
+            });
+            
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'colaboradores.csv';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            toast.success("Exportação concluída!");
+        } catch (error: any) {
+            console.error("Erro ao exportar:", error);
+            if (error.response?.status === 401 || error.response?.status === 403) {
+                toast.error("Não autorizado. Faça login novamente.");
+            } else {
+                toast.error(error.message || "Não foi possível exportar os dados.");
+            }
+        }
+    }
+
 
     return (
         <PageTransition>
@@ -65,11 +90,16 @@ export function Collaborators() {
                     title="Colaboradores"
                     subtitle="Gerencie os colaboradores da empresa"
                 >
-                    <Button onClick={handleNewCollaborator}>
-                        <PlusIcon size={20} />
-                        Novo Colaborador
-                    </Button>
-
+                    <div className="flex items-center gap-3">
+                        <Button variant="outline" onClick={handleExportCSV}>
+                            <Download size={20} />
+                            Exportar CSV
+                        </Button>
+                        <Button onClick={handleNewCollaborator}>
+                            <PlusIcon size={20} />
+                            Novo Colaborador
+                        </Button>
+                    </div>
                 </PageHeader>
 
                 <div className="flex flex-col md:flex-row gap-4 mb-6">

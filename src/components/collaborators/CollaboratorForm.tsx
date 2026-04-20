@@ -3,14 +3,19 @@ import type Worker from "../../models/Worker";
 import type Position from "../../models/Position";
 import { Button } from "../ui/Button";
 import { listarCargosAll } from "../../services/cargoService";
+import type { PacoteBeneficio } from "../../models/NovosRecursos";
+import { listarPacotesBeneficios } from "../../services/colaboradorService";
 import {
   User,
   Mail,
   FileText,
   Calendar,
   Briefcase,
-  DollarSign
+  DollarSign,
+  Gift
 } from "lucide-react";
+import { ChecklistAdmissao } from "./ChecklistAdmissao";
+import { HistoricoColaborador } from "./HistoricoColaborador";
 
 interface Props {
   initial?: Worker | null;
@@ -27,9 +32,15 @@ type FormData = {
   salario: number;
   status: boolean;
   cargoId?: number;
+  dataFimExperiencia?: string;
+  dataVencimentoAso?: string;
+  dataLimiteFerias?: string;
+  pacoteBeneficioId?: number;
+  tipoContrato: "CLT" | "PJ" | "ESTAGIO";
 };
 
 export default function CollaboratorForm({ initial, onSubmit, onCancel }: Props) {
+  const [activeTab, setActiveTab] = useState<"dados" | "admissao" | "historico">("dados");
   const defaultForm = (): FormData => ({
     id: 0,
     nome: "",
@@ -39,9 +50,15 @@ export default function CollaboratorForm({ initial, onSubmit, onCancel }: Props)
     salario: 0,
     status: true,
     cargoId: undefined,
+    dataFimExperiencia: "",
+    dataVencimentoAso: "",
+    dataLimiteFerias: "",
+    pacoteBeneficioId: undefined,
+    tipoContrato: "CLT",
   });
   const [form, setForm] = useState<FormData>(defaultForm());
   const [cargos, setCargos] = useState<Position[]>([]);
+  const [pacotes, setPacotes] = useState<PacoteBeneficio[]>([]);
   const [salarioInput, setSalarioInput] = useState<string>("");
   function formatBRL(n: number) {
     return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n || 0);
@@ -75,6 +92,17 @@ const [isLoading, setIsLoading] = useState(false);
         salario: initial.salario ?? 0,
         status: initial.status ?? true,
         cargoId: initial.cargo?.id,
+        dataFimExperiencia: initial.dataFimExperiencia
+          ? new Date(initial.dataFimExperiencia).toISOString().substring(0, 10)
+          : "",
+        dataVencimentoAso: initial.dataVencimentoAso
+          ? new Date(initial.dataVencimentoAso).toISOString().substring(0, 10)
+          : "",
+        dataLimiteFerias: initial.dataLimiteFerias
+          ? new Date(initial.dataLimiteFerias).toISOString().substring(0, 10)
+          : "",
+        pacoteBeneficioId: initial.pacoteBeneficio?.id,
+        tipoContrato: initial.tipoContrato || "CLT",
       });
       setSalarioInput(formatBRL(initial.salario ?? 0));
     } else {
@@ -85,6 +113,7 @@ const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     listarCargosAll().then(setCargos).catch(() => setCargos([]));
+    listarPacotesBeneficios().then(setPacotes).catch(() => setPacotes([]));
   }, []);
 
   function handleChange<K extends keyof FormData>(key: K, value: FormData[K]) {
@@ -101,9 +130,16 @@ const [isLoading, setIsLoading] = useState(false);
       data_admissao: form.dataAdmissao,
       salario: form.salario,
       status: form.status,
+      tipoContrato: form.tipoContrato,
     };
+    if (form.dataFimExperiencia) payload.dataFimExperiencia = form.dataFimExperiencia;
+    if (form.dataVencimentoAso) payload.dataVencimentoAso = form.dataVencimentoAso;
+    if (form.dataLimiteFerias) payload.dataLimiteFerias = form.dataLimiteFerias;
     if (form.cargoId) {
       payload.cargo = { id: form.cargoId };
+    }
+    if (form.pacoteBeneficioId) {
+      payload.pacoteBeneficio = { id: form.pacoteBeneficioId };
     }
     if (form.id) {
       payload.id = form.id;
@@ -115,13 +151,49 @@ const [isLoading, setIsLoading] = useState(false);
   const iconClass = "absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary-teal transition-colors";
   const inputClass = "w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 outline-none focus:border-primary-teal focus:ring-4 focus:ring-primary-teal/10 transition-all text-corporate-slate placeholder:text-gray-400";
   const labelClass = "block text-sm font-semibold text-corporate-slate mb-1.5 ml-1";
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
 
-      <div className="space-y-4">
-        <h4 className="text-xs font-bold text-metallic-silver uppercase tracking-wider border-b border-gray-100 pb-2">
-          Dados Pessoais
-        </h4>
+  const tabClass = (tab: "dados" | "admissao" | "historico") => 
+    `pb-3 px-1 text-sm font-medium transition-colors border-b-2 ${
+      activeTab === tab 
+        ? "border-primary-teal text-primary-teal" 
+        : "border-transparent text-metallic-silver hover:text-corporate-slate"
+    }`;
+
+  return (
+    <div className="space-y-6">
+      {/* Tabs - Só exibe as extras se já estiver editando um colaborador existente */}
+      {initial && (
+        <div className="flex gap-6 border-b border-gray-100">
+          <button 
+            type="button" 
+            onClick={() => setActiveTab("dados")} 
+            className={tabClass("dados")}
+          >
+            Dados do Colaborador
+          </button>
+          <button 
+            type="button" 
+            onClick={() => setActiveTab("admissao")} 
+            className={tabClass("admissao")}
+          >
+            Documentos/Admissão
+          </button>
+          <button 
+            type="button" 
+            onClick={() => setActiveTab("historico")} 
+            className={tabClass("historico")}
+          >
+            Histórico
+          </button>
+        </div>
+      )}
+
+      {activeTab === "dados" && (
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-4">
+            <h4 className="text-xs font-bold text-metallic-silver uppercase tracking-wider border-b border-gray-100 pb-2">
+              Dados Pessoais
+            </h4>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
 
@@ -167,6 +239,24 @@ const [isLoading, setIsLoading] = useState(false);
               />
             </div>
           </div>
+          <div>
+            <label className={labelClass}>Pacote de Benefícios</label>
+            <div className={inputContainerClass}>
+              <Gift size={18} className={iconClass} />
+              <select
+                className={`${inputClass} appearance-none bg-white`}
+                value={form.pacoteBeneficioId ?? ""}
+                onChange={(e) => handleChange("pacoteBeneficioId", e.target.value ? Number(e.target.value) : undefined)}
+              >
+                <option value="">Sem pacote (Apenas VT/VR padrão)</option>
+                {pacotes.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.nome} ({formatBRL(p.valorTotal)})
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -177,6 +267,23 @@ const [isLoading, setIsLoading] = useState(false);
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           
+          <div className="lg:col-span-2">
+            <label className={labelClass}>Tipo de Contrato</label>
+            <div className={inputContainerClass}>
+              <FileText size={18} className={iconClass} />
+              <select
+                className={`${inputClass} appearance-none bg-white`}
+                value={form.tipoContrato}
+                onChange={(e) => handleChange("tipoContrato", e.target.value as "CLT" | "PJ" | "ESTAGIO")}
+                required
+              >
+                <option value="CLT">CLT</option>
+                <option value="PJ">PJ</option>
+                <option value="ESTAGIO">Estágio</option>
+              </select>
+            </div>
+          </div>
+
           <div className="lg:col-span-2">
             <label className={labelClass}>Cargo / Função</label>
             <div className={inputContainerClass}>
@@ -230,6 +337,53 @@ const [isLoading, setIsLoading] = useState(false);
         </div>
       </div>
 
+      <div className="space-y-4">
+        <h4 className="text-xs font-bold text-metallic-silver uppercase tracking-wider border-b border-gray-100 pb-2 mt-2">
+          Controle de Prazos (Opcional)
+        </h4>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+          <div>
+            <label className={labelClass}>Fim da Experiência</label>
+            <div className={inputContainerClass}>
+              <Calendar size={18} className={iconClass} />
+              <input
+                type="date"
+                className={inputClass}
+                value={form.dataFimExperiencia}
+                onChange={(e) => handleChange("dataFimExperiencia", e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className={labelClass}>Vencimento ASO</label>
+            <div className={inputContainerClass}>
+              <Calendar size={18} className={iconClass} />
+              <input
+                type="date"
+                className={inputClass}
+                value={form.dataVencimentoAso}
+                onChange={(e) => handleChange("dataVencimentoAso", e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className={labelClass}>Limite para Férias</label>
+            <div className={inputContainerClass}>
+              <Calendar size={18} className={iconClass} />
+              <input
+                type="date"
+                className={inputClass}
+                value={form.dataLimiteFerias}
+                onChange={(e) => handleChange("dataLimiteFerias", e.target.value)}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="bg-gray-50 p-4 rounded-xl flex items-center justify-between border border-gray-100">
         <div className="flex flex-col">
           <span className="text-sm font-bold text-corporate-slate">Situação Cadastral</span>
@@ -253,22 +407,32 @@ const [isLoading, setIsLoading] = useState(false);
         </div>
         </div>
 
-      <div className="flex justify-end gap-3 pt-4 border-t border-gray-50 flex-wrap">
-        {onCancel && (
-          <Button
-            type="button"
-            variant="ghost" 
-            onClick={onCancel}
-            disabled={isLoading}
-            className="text-gray-500 hover:text-corporate-slate hover:bg-gray-100"
-          >
-            Cancelar
-          </Button>
-        )}
-        <Button type="submit" isLoading={isLoading}>
-          {form.id ? "Salvar Alterações" : "Cadastrar Colaborador"}
-        </Button>
-      </div>
-    </form>
+          <div className="flex justify-end gap-3 pt-4 border-t border-gray-50 flex-wrap">
+            {onCancel && (
+              <Button
+                type="button"
+                variant="ghost" 
+                onClick={onCancel}
+                disabled={isLoading}
+                className="text-gray-500 hover:text-corporate-slate hover:bg-gray-100"
+              >
+                Cancelar
+              </Button>
+            )}
+            <Button type="submit" isLoading={isLoading}>
+              {form.id ? "Salvar Alterações" : "Cadastrar Colaborador"}
+            </Button>
+          </div>
+        </form>
+      )}
+
+      {activeTab === "admissao" && initial && (
+        <ChecklistAdmissao colaborador={initial} />
+      )}
+
+      {activeTab === "historico" && initial && (
+        <HistoricoColaborador colaborador={initial} />
+      )}
+    </div>
   );
 }
