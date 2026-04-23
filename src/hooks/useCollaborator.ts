@@ -29,18 +29,18 @@ export function useCollaborator(id?: number) {
     load();
   }, [load]);
 
-  const save = useCallback(async (payload: any) => {
+  const save = useCallback(async (payload: Partial<Worker> & { id?: number }) => {
     setIsLoading(true);
     setError(null);
     try {
-      const res = payload.id ? await atualizarColaborador(payload) : await criarColaborador(payload);
+      const res = payload.id
+        ? await atualizarColaborador(payload as Partial<Worker> & { id: number })
+        : await criarColaborador(payload);
       setData(res);
       return res;
-    } catch (err: any) {
-      const message =
-        err?.response?.data?.message ||
-        err?.response?.data?.error ||
-        "Falha ao salvar colaborador";
+    } catch (err: unknown) {
+      const e = err as { response?: { data?: { message?: string; error?: string } } };
+      const message = e?.response?.data?.message || e?.response?.data?.error || "Falha ao salvar colaborador";
       setError(message);
       throw new Error(message);
     } finally {

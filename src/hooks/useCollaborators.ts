@@ -16,7 +16,7 @@ export function useCollaborators() {
         ? await buscarColaboradoresPorNome(query)
         : await listarColaboradores();
       setData(res);
-    } catch (e: unknown) {
+    } catch {
       setError("Falha ao carregar colaboradores");
     } finally {
       setIsLoading(false);
