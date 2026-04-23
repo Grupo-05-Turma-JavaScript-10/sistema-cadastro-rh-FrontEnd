@@ -1,10 +1,7 @@
 import { Search } from "lucide-react";
 import { type ComponentProps } from "react";
 
-interface SearchBarProps extends ComponentProps<"input"> {
-}
-
-export function SearchBar({ className, ...props }: SearchBarProps) {
+export function SearchBar({ className, ...props }: ComponentProps<"input">) {
   return (
     <div 
  
