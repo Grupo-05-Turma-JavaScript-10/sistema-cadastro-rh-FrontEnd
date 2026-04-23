@@ -17,12 +17,12 @@ export async function buscarColaboradoresPorNome(nome: string): Promise<Worker[]
   return data;
 }
 
-export async function criarColaborador(colaborador: Worker): Promise<Worker> {
+export async function criarColaborador(colaborador: Partial<Worker>): Promise<Worker> {
   const { data } = await api.post("/colaboradores", colaborador);
   return data;
 }
 
-export async function atualizarColaborador(colaborador: Worker): Promise<Worker> {
+export async function atualizarColaborador(colaborador: Partial<Worker> & { id: number }): Promise<Worker> {
   const { data } = await api.put(`/colaboradores`, colaborador);
   return data;
 }
@@ -35,8 +35,9 @@ export async function calcularSalarioColaborador(id: number, payload: Record<str
   try {
     const { data } = await api.put(`/colaboradores/calcular-salario/${id}`, payload);
     return data;
-  } catch (err: any) {
-    if (err?.response?.status === 404 || err?.response?.status === 405) {
+  } catch (err: unknown) {
+    const e = err as { response?: { status?: number } };
+    if (e?.response?.status === 404 || e?.response?.status === 405) {
       const { data } = await api.post(`/colaboradores/${id}/calcular-salario`, payload);
       return data;
     }

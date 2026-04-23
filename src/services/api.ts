@@ -30,7 +30,17 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        // não limpar token automaticamente em 401; deixar o guard de rota decidir
+        // Se receber 401 (Não autorizado) ou 403 (Proibido), significa que o token expirou ou é inválido
+        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+            // Limpa o localStorage
+            localStorage.removeItem("token");
+            
+            // Força o reload da página para limpar o estado em memória (AuthContext)
+            // e forçar o PrivateRoute a jogar o usuário pro /login
+            if (window.location.pathname !== '/login') {
+                window.location.href = '/login';
+            }
+        }
         return Promise.reject(error);
     }
 );
