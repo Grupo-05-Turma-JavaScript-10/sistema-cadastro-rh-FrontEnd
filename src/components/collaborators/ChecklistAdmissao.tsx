@@ -86,7 +86,7 @@ export function ChecklistAdmissao({ colaborador }: Props) {
           Documentos de Admissão
         </h4>
         {pendencias.length === 0 && (
-          <Button variant="outline" size="sm" onClick={handleGerarPadrao}>
+          <Button variant="outline" onClick={handleGerarPadrao} className="px-3 py-2 text-sm">
             <Plus size={16} className="mr-1" /> Gerar Checklist Padrão
           </Button>
         )}

@@ -1,21 +1,19 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type Worker from "../../models/Worker";
-import type Position from "../../models/Position";
 import { Button } from "../ui/Button";
-import { listarCargosAll } from "../../services/cargoService";
-import type { PacoteBeneficio } from "../../models/NovosRecursos";
-import { listarPacotesBeneficios } from "../../services/colaboradorService";
-import {
-  User,
-  Mail,
-  FileText,
-  Calendar,
-  Briefcase,
-  DollarSign,
-  Gift
-} from "lucide-react";
 import { ChecklistAdmissao } from "./ChecklistAdmissao";
 import { HistoricoColaborador } from "./HistoricoColaborador";
+
+// Hooks
+import { usePositions } from "../../hooks/usePositions";
+import { usePacotesBeneficios } from "../../hooks/usePacotesBeneficios";
+import { useCollaboratorForm } from "../../hooks/useCollaboratorForm";
+
+// Form Components
+import { PersonalDataFields } from "./form/PersonalDataFields";
+import { ContractDataFields } from "./form/ContractDataFields";
+import { DeadlinesFields } from "./form/DeadlinesFields";
+import { StatusToggle } from "./form/StatusToggle";
 
 interface Props {
   initial?: Worker | null;
@@ -23,134 +21,13 @@ interface Props {
   onCancel?: () => void;
 }
 
-type FormData = {
-  id: number;
-  nome: string;
-  cpf: string;
-  email: string;
-  dataAdmissao: string;
-  salario: number;
-  status: boolean;
-  cargoId?: number;
-  dataFimExperiencia?: string;
-  dataVencimentoAso?: string;
-  dataLimiteFerias?: string;
-  pacoteBeneficioId?: number;
-  tipoContrato: "CLT" | "PJ" | "ESTAGIO";
-};
-
 export default function CollaboratorForm({ initial, onSubmit, onCancel }: Props) {
   const [activeTab, setActiveTab] = useState<"dados" | "admissao" | "historico">("dados");
-  const defaultForm = (): FormData => ({
-    id: 0,
-    nome: "",
-    cpf: "",
-    email: "",
-    dataAdmissao: new Date().toISOString().substring(0, 10),
-    salario: 0,
-    status: true,
-    cargoId: undefined,
-    dataFimExperiencia: "",
-    dataVencimentoAso: "",
-    dataLimiteFerias: "",
-    pacoteBeneficioId: undefined,
-    tipoContrato: "CLT",
-  });
-  const [form, setForm] = useState<FormData>(defaultForm());
-  const [cargos, setCargos] = useState<Position[]>([]);
-  const [pacotes, setPacotes] = useState<PacoteBeneficio[]>([]);
-  const [salarioInput, setSalarioInput] = useState<string>("");
-  function formatBRL(n: number) {
-    return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n || 0);
-  }
-  function parseCurrencyInput(value: string) {
-    const digits = value.replace(/\D/g, "");
-    const num = Number(digits) / 100;
-    return Number.isFinite(num) ? num : 0;
-  }
-  function formatCPFInput(value: string) {
-    const digits = value.replace(/\D/g, "").slice(0, 11);
-    const parts = [];
-    if (digits.length > 0) parts.push(digits.slice(0, 3));
-    if (digits.length >= 4) parts.push(digits.slice(3, 6));
-    if (digits.length >= 7) parts.push(digits.slice(6, 9));
-    const suffix = digits.length >= 10 ? digits.slice(9, 11) : digits.slice(9);
-    const body = parts.join(".");
-    return suffix ? `${body}-${suffix}` : body;
-  }
-const [isLoading, setIsLoading] = useState(false);
-  useEffect(() => {
-    if (initial) {
-      setForm({
-        id: initial.id ?? 0,
-        nome: initial.nome ?? "",
-        cpf: formatCPFInput(initial.cpf ?? ""),
-        email: initial.email ?? "",
-        dataAdmissao: initial.data_admissão
-          ? new Date(initial.data_admissão).toISOString().substring(0, 10)
-          : new Date().toISOString().substring(0, 10),
-        salario: initial.salario ?? 0,
-        status: initial.status ?? true,
-        cargoId: initial.cargo?.id,
-        dataFimExperiencia: initial.dataFimExperiencia
-          ? new Date(initial.dataFimExperiencia).toISOString().substring(0, 10)
-          : "",
-        dataVencimentoAso: initial.dataVencimentoAso
-          ? new Date(initial.dataVencimentoAso).toISOString().substring(0, 10)
-          : "",
-        dataLimiteFerias: initial.dataLimiteFerias
-          ? new Date(initial.dataLimiteFerias).toISOString().substring(0, 10)
-          : "",
-        pacoteBeneficioId: initial.pacoteBeneficio?.id,
-        tipoContrato: initial.tipoContrato || "CLT",
-      });
-      setSalarioInput(formatBRL(initial.salario ?? 0));
-    } else {
-      setForm(defaultForm());
-      setSalarioInput(formatBRL(0));
-    }
-  }, [initial]);
-
-  useEffect(() => {
-    listarCargosAll().then(setCargos).catch(() => setCargos([]));
-    listarPacotesBeneficios().then(setPacotes).catch(() => setPacotes([]));
-  }, []);
-
-  function handleChange<K extends keyof FormData>(key: K, value: FormData[K]) {
-    setForm((prev) => ({ ...prev, [key]: value }));
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const payload: any = {
-      nome: form.nome,
-      cpf: form.cpf.replace(/\D/g, ""),
-      email: form.email,
-      dataAdmissao: form.dataAdmissao,
-      data_admissao: form.dataAdmissao,
-      salario: form.salario,
-      status: form.status,
-      tipoContrato: form.tipoContrato,
-    };
-    if (form.dataFimExperiencia) payload.dataFimExperiencia = form.dataFimExperiencia;
-    if (form.dataVencimentoAso) payload.dataVencimentoAso = form.dataVencimentoAso;
-    if (form.dataLimiteFerias) payload.dataLimiteFerias = form.dataLimiteFerias;
-    if (form.cargoId) {
-      payload.cargo = { id: form.cargoId };
-    }
-    if (form.pacoteBeneficioId) {
-      payload.pacoteBeneficio = { id: form.pacoteBeneficioId };
-    }
-    if (form.id) {
-      payload.id = form.id;
-    }
-    await onSubmit(payload as unknown as Worker);
-    setIsLoading(false);
-  }
-  const inputContainerClass = "relative group";
-  const iconClass = "absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary-teal transition-colors";
-  const inputClass = "w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 outline-none focus:border-primary-teal focus:ring-4 focus:ring-primary-teal/10 transition-all text-corporate-slate placeholder:text-gray-400";
-  const labelClass = "block text-sm font-semibold text-corporate-slate mb-1.5 ml-1";
+  
+  // Custom Hooks encapsulando a lógica
+  const { form, handleChange, handleSubmit, isLoading } = useCollaboratorForm(initial, onSubmit);
+  const { data: cargos } = usePositions();
+  const { pacotes } = usePacotesBeneficios();
 
   const tabClass = (tab: "dados" | "admissao" | "historico") => 
     `pb-3 px-1 text-sm font-medium transition-colors border-b-2 ${
@@ -164,25 +41,13 @@ const [isLoading, setIsLoading] = useState(false);
       {/* Tabs - Só exibe as extras se já estiver editando um colaborador existente */}
       {initial && (
         <div className="flex gap-6 border-b border-gray-100">
-          <button 
-            type="button" 
-            onClick={() => setActiveTab("dados")} 
-            className={tabClass("dados")}
-          >
+          <button type="button" onClick={() => setActiveTab("dados")} className={tabClass("dados")}>
             Dados do Colaborador
           </button>
-          <button 
-            type="button" 
-            onClick={() => setActiveTab("admissao")} 
-            className={tabClass("admissao")}
-          >
+          <button type="button" onClick={() => setActiveTab("admissao")} className={tabClass("admissao")}>
             Documentos/Admissão
           </button>
-          <button 
-            type="button" 
-            onClick={() => setActiveTab("historico")} 
-            className={tabClass("historico")}
-          >
+          <button type="button" onClick={() => setActiveTab("historico")} className={tabClass("historico")}>
             Histórico
           </button>
         </div>
@@ -190,222 +55,28 @@ const [isLoading, setIsLoading] = useState(false);
 
       {activeTab === "dados" && (
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-4">
-            <h4 className="text-xs font-bold text-metallic-silver uppercase tracking-wider border-b border-gray-100 pb-2">
-              Dados Pessoais
-            </h4>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-
-          <div className="lg:col-span-2">
-            <label className={labelClass}>Nome Completo</label>
-            <div className={inputContainerClass}>
-              <User size={18} className={iconClass} />
-              <input
-                className={inputClass}
-                placeholder="Ex: João da Silva"
-                value={form.nome}
-                onChange={(e) => handleChange("nome", e.target.value)}
-                required
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className={labelClass}>E-mail Corporativo</label>
-            <div className={inputContainerClass}>
-              <Mail size={18} className={iconClass} />
-              <input
-                type="email"
-                className={inputClass}
-                placeholder="joao@empresa.com"
-                value={form.email}
-                onChange={(e) => handleChange("email", e.target.value)}
-                required
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className={labelClass}>CPF</label>
-            <div className={inputContainerClass}>
-              <FileText size={18} className={iconClass} />
-              <input
-                className={inputClass}
-                placeholder="000.000.000-00"
-                value={form.cpf}
-                onChange={(e) => handleChange("cpf", formatCPFInput(e.target.value))}
-                required
-              />
-            </div>
-          </div>
-          <div>
-            <label className={labelClass}>Pacote de Benefícios</label>
-            <div className={inputContainerClass}>
-              <Gift size={18} className={iconClass} />
-              <select
-                className={`${inputClass} appearance-none bg-white`}
-                value={form.pacoteBeneficioId ?? ""}
-                onChange={(e) => handleChange("pacoteBeneficioId", e.target.value ? Number(e.target.value) : undefined)}
-              >
-                <option value="">Sem pacote (Apenas VT/VR padrão)</option>
-                {pacotes.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.nome} ({formatBRL(p.valorTotal)})
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="space-y-4">
-        <h4 className="text-xs font-bold text-metallic-silver uppercase tracking-wider border-b border-gray-100 pb-2 mt-2">
-          Dados Contratuais
-        </h4>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           
-          <div className="lg:col-span-2">
-            <label className={labelClass}>Tipo de Contrato</label>
-            <div className={inputContainerClass}>
-              <FileText size={18} className={iconClass} />
-              <select
-                className={`${inputClass} appearance-none bg-white`}
-                value={form.tipoContrato}
-                onChange={(e) => handleChange("tipoContrato", e.target.value as "CLT" | "PJ" | "ESTAGIO")}
-                required
-              >
-                <option value="CLT">CLT</option>
-                <option value="PJ">PJ</option>
-                <option value="ESTAGIO">Estágio</option>
-              </select>
-            </div>
-          </div>
+          <PersonalDataFields 
+            form={form} 
+            handleChange={handleChange} 
+            pacotes={pacotes} 
+          />
 
-          <div className="lg:col-span-2">
-            <label className={labelClass}>Cargo / Função</label>
-            <div className={inputContainerClass}>
-              <Briefcase size={18} className={iconClass} />
-              <select
-                className={`${inputClass} appearance-none bg-white`}
-                value={form.cargoId ?? ""}
-                onChange={(e) => handleChange("cargoId", e.target.value ? Number(e.target.value) : undefined)}
-              >
-                <option value="">Selecione um cargo...</option>
-                {cargos.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.nome}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+          <ContractDataFields 
+            form={form} 
+            handleChange={handleChange} 
+            cargos={cargos} 
+          />
 
-          <div>
-            <label className={labelClass}>Salário Base</label>
-            <div className={inputContainerClass}>
-              <DollarSign size={18} className={iconClass} />
-              <input
-                type="text"
-                className={inputClass}
-                placeholder="0,00"
-                value={salarioInput}
-                onChange={(e) => {
-                  const num = parseCurrencyInput(e.target.value);
-                  setSalarioInput(formatBRL(num));
-                  handleChange("salario", num);
-                }}
-              />
-            </div>
-          </div>
+          <DeadlinesFields 
+            form={form} 
+            handleChange={handleChange} 
+          />
 
-          <div>
-            <label className={labelClass}>Data de Admissão</label>
-            <div className={inputContainerClass}>
-              <Calendar size={18} className={iconClass} />
-              <input
-                type="date"
-                className={inputClass}
-                value={form.dataAdmissao}
-                onChange={(e) => handleChange("dataAdmissao", e.target.value)}
-                required
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="space-y-4">
-        <h4 className="text-xs font-bold text-metallic-silver uppercase tracking-wider border-b border-gray-100 pb-2 mt-2">
-          Controle de Prazos (Opcional)
-        </h4>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-          <div>
-            <label className={labelClass}>Fim da Experiência</label>
-            <div className={inputContainerClass}>
-              <Calendar size={18} className={iconClass} />
-              <input
-                type="date"
-                className={inputClass}
-                value={form.dataFimExperiencia}
-                onChange={(e) => handleChange("dataFimExperiencia", e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className={labelClass}>Vencimento ASO</label>
-            <div className={inputContainerClass}>
-              <Calendar size={18} className={iconClass} />
-              <input
-                type="date"
-                className={inputClass}
-                value={form.dataVencimentoAso}
-                onChange={(e) => handleChange("dataVencimentoAso", e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className={labelClass}>Limite para Férias</label>
-            <div className={inputContainerClass}>
-              <Calendar size={18} className={iconClass} />
-              <input
-                type="date"
-                className={inputClass}
-                value={form.dataLimiteFerias}
-                onChange={(e) => handleChange("dataLimiteFerias", e.target.value)}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-gray-50 p-4 rounded-xl flex items-center justify-between border border-gray-100">
-        <div className="flex flex-col">
-          <span className="text-sm font-bold text-corporate-slate">Situação Cadastral</span>
-          <span className="text-xs text-metallic-silver">Define se o colaborador está ativo ou inativo na empresa.</span>
-        </div>
-        
-        <div className="flex items-center gap-3">
-            <span className={`text-sm font-bold transition-colors ${form.status ? 'text-primary-teal' : 'text-gray-400'}`}>
-                {form.status ? 'Ativo' : 'Inativo'}
-            </span>
-
-            <label className="relative inline-flex items-center cursor-pointer">
-            <input 
-                type="checkbox" 
-                className="sr-only peer"
-                checked={form.status}
-                onChange={(e) => handleChange("status", e.target.checked)}
-            />
-            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-teal/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-teal"></div>
-            </label>
-        </div>
-        </div>
+          <StatusToggle 
+            status={form.status} 
+            onChange={(val) => handleChange("status", val)} 
+          />
 
           <div className="flex justify-end gap-3 pt-4 border-t border-gray-50 flex-wrap">
             {onCancel && (
@@ -426,13 +97,8 @@ const [isLoading, setIsLoading] = useState(false);
         </form>
       )}
 
-      {activeTab === "admissao" && initial && (
-        <ChecklistAdmissao colaborador={initial} />
-      )}
-
-      {activeTab === "historico" && initial && (
-        <HistoricoColaborador colaborador={initial} />
-      )}
+      {activeTab === "admissao" && initial && <ChecklistAdmissao colaborador={initial} />}
+      {activeTab === "historico" && initial && <HistoricoColaborador colaborador={initial} />}
     </div>
   );
 }

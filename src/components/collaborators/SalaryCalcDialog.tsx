@@ -7,7 +7,7 @@ interface Props {
   open: boolean;
   onClose: () => void;
   worker?: Worker | null;
-  onCalculate?: (payload: Record<string, unknown>) => Promise<any> | any;
+  onCalculate?: (payload: Record<string, unknown>) => Promise<unknown> | unknown;
 }
 
 export default function SalaryCalcDialog({ open, onClose, onCalculate, worker }: Props) {
