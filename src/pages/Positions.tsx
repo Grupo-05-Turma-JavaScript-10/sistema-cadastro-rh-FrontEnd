@@ -113,7 +113,7 @@ export function Cargos() {
                 >
                     <PositionForm
                         initial={selected ?? null}
-                        onSubmit={handleSaveSubmit as any} 
+                        onSubmit={handleSaveSubmit} 
                         onCancel={() => setOpenForm(false)}
                         isLoading={isSaving} 
                     />

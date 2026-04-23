@@ -11,6 +11,7 @@ import { useCollaborators } from "../hooks/useCollaborators";
 import { useCollaborator } from "../hooks/useCollaborator";
 import { deletarColaborador } from "../services/colaboradorService";
 import api from "../services/api";
+import type Worker from "../models/Worker";
 import { toast } from "react-toastify";
 import { PageTransition } from "../components/ui/PageTransition";
 import { Modal } from "../components/ui/Modal";
@@ -28,18 +29,19 @@ export function Collaborators() {
         setOpenForm(true);
     }
 
-    async function handleSave(payload: any) {
+    async function handleSave(payload: Worker) {
         try {
             await save(payload);
             setOpenForm(false);
             refetch();
             toast.success("Colaborador salvo com sucesso!");
-        } catch (err: any) {
-            toast.error(err?.message || "Falha ao salvar colaborador. Verifique os dados obrigatórios.");
+        } catch (err: unknown) {
+            const error = err as { message?: string };
+            toast.error(error?.message || "Falha ao salvar colaborador. Verifique os dados obrigatórios.");
         }
     }
 
-    function handleEdit(worker: any) {
+    function handleEdit(worker: Worker) {
         setSelectedId(worker.id);
         setOpenForm(true);
     }
@@ -52,7 +54,7 @@ export function Collaborators() {
         toast.success("Colaborador excluído!");
     }
 
-    function handleDelete(worker: any) {
+    function handleDelete(worker: Worker) {
         setSelectedId(worker.id);
         setOpenDelete(true);
     }
@@ -71,12 +73,13 @@ export function Collaborators() {
             a.click();
             a.remove();
             toast.success("Exportação concluída!");
-        } catch (error: any) {
-            console.error("Erro ao exportar:", error);
-            if (error.response?.status === 401 || error.response?.status === 403) {
+        } catch (error: unknown) {
+            const err = error as { message?: string; response?: { status?: number } };
+            console.error("Erro ao exportar:", err);
+            if (err.response?.status === 401 || err.response?.status === 403) {
                 toast.error("Não autorizado. Faça login novamente.");
             } else {
-                toast.error(error.message || "Não foi possível exportar os dados.");
+                toast.error(err.message || "Não foi possível exportar os dados.");
             }
         }
     }

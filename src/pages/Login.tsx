@@ -35,7 +35,7 @@ export function Login() {
 
     try {
       await handleLogin(usuarioLogin);
-    } catch (error) {
+    } catch {
       toast.error("Erro ao entrar. Verifique seu usuário e senha.");
     }
   }

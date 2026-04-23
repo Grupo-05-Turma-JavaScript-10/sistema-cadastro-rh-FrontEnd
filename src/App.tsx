@@ -3,7 +3,6 @@ import {
   Routes,
   Route,
   useLocation,
-  Navigate,
 } from "react-router-dom";
 import { useEffect } from "react";
 import { Sidebar } from "./components/sidebar/Sidebar";
@@ -21,7 +20,7 @@ import { TermsOfService } from "./pages/TermsOfService";
 import { CookiePolicy } from "./pages/CookiePolicy";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import type { ReactNode } from "react";
+import { PrivateRoute } from "./routes/PrivateRoute";
 
 function Layout() {
   const location = useLocation();
@@ -45,12 +44,6 @@ function Layout() {
 
   const footerPaths = ["/", "/privacidade", "/termos", "/cookies"];
   const showFooter = footerPaths.includes(location.pathname);
-
-  function PrivateRoute({ children }: { children: ReactNode }) {
-    const token = localStorage.getItem("token");
-    if (!token) return <Navigate to="/login" replace />;
-    return <>{children}</>;
-  }
 
   return (
     <div className="flex flex-col min-h-screen bg-background-light">

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Users, TrendingUp, AlertTriangle, FileWarning } from "lucide-react";
+import { Users, TrendingUp, AlertTriangle, FileWarning, DollarSign, PieChart } from "lucide-react";
 import { Card } from "../components/ui/Card";
 import { StatCard } from "../components/ui/StatCard";
 import { PageHeader } from "../components/ui/PageHeader";
@@ -44,14 +44,23 @@ export function Dashboard() {
       try {
         setLoading(true);
         const [dadosColab, dadosPendencias, dadosAlertas] = await Promise.all([
-          listarColaboradores(),
-          listarPendenciasAbertas().catch(() => []), // Falbacks para não quebrar a tela
-          listarAlertasVencimentos().catch(() => [])
+          listarColaboradores().catch((e) => {
+            if (e.response?.status === 401 || e.response?.status === 403) throw e;
+            return [];
+          }),
+          listarPendenciasAbertas().catch((e) => {
+            if (e.response?.status === 401 || e.response?.status === 403) throw e;
+            return [];
+          }),
+          listarAlertasVencimentos().catch((e) => {
+            if (e.response?.status === 401 || e.response?.status === 403) throw e;
+            return [];
+          })
         ]);
         setColaboradores(dadosColab);
         setPendencias(dadosPendencias);
         setAlertas(dadosAlertas);
-      } catch (erro: any) {
+      } catch (erro: unknown) {
         console.error("Erro ao carregar dashboard:", erro);
         toast.error("Falha ao carregar dados do dashboard.");
       } finally {
@@ -78,6 +87,41 @@ export function Dashboard() {
   // const usuariosDoSistema = colaboradores.filter((c) => {
   //   return typeof c.email === "string" && c.email !== "" && c.email.includes("@") && c.email.includes(".");
   // }).length;
+
+  const ativos = colaboradores.filter(c => c.status);
+  
+  // Resumo Financeiro Estimado
+  const custoTotalFolha = ativos.reduce((acc, c) => {
+    const sal = (c.salario && !isNaN(Number(c.salario))) ? Number(c.salario) : 0;
+    const enc = (c.encargosMensais && !isNaN(Number(c.encargosMensais))) ? Number(c.encargosMensais) : 0;
+    return acc + sal + enc;
+  }, 0);
+  
+  const mediaSalarial = ativos.length > 0 
+    ? (ativos.reduce((acc, c) => {
+        const sal = (c.salario && !isNaN(Number(c.salario))) ? Number(c.salario) : 0;
+        return acc + sal;
+      }, 0) / ativos.length) 
+    : 0;
+
+  const formatCurrency = (val: number) => {
+    let num = Number(val);
+    if (isNaN(num) || !isFinite(num)) {
+      num = 0;
+    }
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(num);
+  }
+
+  // Distribuição de Contratos
+  const contagemCLT = ativos.filter(c => c.tipoContrato === 'CLT').length;
+  const contagemPJ = ativos.filter(c => c.tipoContrato === 'PJ').length;
+  const contagemEstagio = ativos.filter(c => c.tipoContrato === 'ESTAGIO').length;
+  
+  const pct = (val: number) => {
+    if (!ativos || ativos.length === 0) return 0;
+    const result = Math.round((val / ativos.length) * 100);
+    return (Number.isNaN(result) || !Number.isFinite(result)) ? 0 : result;
+  };
 
   const novosEsteMes = 7;
   const taxaCrescimento = "5.2%";
@@ -202,7 +246,11 @@ export function Dashboard() {
               <p className="text-sm text-metallic-silver">Todos os colaboradores estão com a documentação em dia.</p>
             ) : (
               <ul className="space-y-3">
-                {pendencias.map((pend) => (
+                {pendencias.map((pend) => {
+                  const nomeColab = pend.colaboradorNome || pend.colaborador?.nome || "Colaborador Indefinido";
+                  const idColab = pend.colaboradorId || pend.colaborador?.id || "N/A";
+                  
+                  return (
                   <li
                     key={pend.id}
                     className="flex items-start justify-between border-b border-gray-50 pb-3 last:border-0"
@@ -210,7 +258,7 @@ export function Dashboard() {
                     <div className="flex flex-col">
                       <p className="text-sm font-bold text-corporate-slate">
                         <Link to="/colaboradores" className="hover:text-primary-teal hover:underline">
-                          {pend.colaboradorNome || `Colaborador #${pend.colaboradorId}`}
+                          {nomeColab !== "Colaborador Indefinido" ? nomeColab : `Colaborador #${idColab}`}
                         </Link>
                       </p>
                       <p className="text-xs text-error-red font-medium mt-0.5 flex items-center gap-1">
@@ -222,9 +270,74 @@ export function Dashboard() {
                       Pendente
                     </span>
                   </li>
-                ))}
+                )})}
               </ul>
             )}
+          </Card>
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+          <Card className="h-full">
+            <h3 className="font-bold text-lg text-corporate-slate mb-6 flex items-center gap-2">
+              <DollarSign size={20} className="text-success-green" />
+              Resumo Financeiro (Ativos)
+            </h3>
+            
+            <div className="space-y-6">
+              <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                <p className="text-sm text-metallic-silver font-medium mb-1">Custo Estimado da Folha</p>
+                <p className="text-2xl font-black text-corporate-slate">{formatCurrency(custoTotalFolha)}</p>
+                <p className="text-xs text-metallic-silver mt-1">Salário base + encargos mensais</p>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4">
+                 <div className="p-4 rounded-xl border border-gray-100">
+                    <p className="text-xs text-metallic-silver font-medium mb-1">Média Salarial</p>
+                    <p className="text-lg font-bold text-corporate-slate">{formatCurrency(mediaSalarial)}</p>
+                 </div>
+              </div>
+            </div>
+          </Card>
+
+          <Card className="h-full">
+            <h3 className="font-bold text-lg text-corporate-slate mb-6 flex items-center gap-2">
+              <PieChart size={20} className="text-primary-teal" />
+              Distribuição de Contratos
+            </h3>
+            
+            <div className="space-y-5">
+              
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm font-bold text-corporate-slate">CLT ({contagemCLT})</span>
+                  <span className="text-xs font-bold text-metallic-silver">{pct(contagemCLT)}%</span>
+                </div>
+                <div className="w-full bg-gray-100 rounded-full h-2.5">
+                  <div className="bg-primary-teal h-2.5 rounded-full" style={{ width: `${pct(contagemCLT)}%` }}></div>
+                </div>
+              </div>
+
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm font-bold text-corporate-slate">PJ ({contagemPJ})</span>
+                  <span className="text-xs font-bold text-metallic-silver">{pct(contagemPJ)}%</span>
+                </div>
+                <div className="w-full bg-gray-100 rounded-full h-2.5">
+                  <div className="bg-indigo-500 h-2.5 rounded-full" style={{ width: `${pct(contagemPJ)}%` }}></div>
+                </div>
+              </div>
+
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm font-bold text-corporate-slate">Estágio ({contagemEstagio})</span>
+                  <span className="text-xs font-bold text-metallic-silver">{pct(contagemEstagio)}%</span>
+                </div>
+                <div className="w-full bg-gray-100 rounded-full h-2.5">
+                  <div className="bg-yellow-400 h-2.5 rounded-full" style={{ width: `${pct(contagemEstagio)}%` }}></div>
+                </div>
+              </div>
+
+            </div>
           </Card>
         </div>
       </div>

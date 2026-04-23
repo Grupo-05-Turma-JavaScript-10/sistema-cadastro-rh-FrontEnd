@@ -43,11 +43,12 @@ export function RegisterForm() {
       await api.post("/usuarios/cadastrar", dadosUsuario);
       toast.success("Cadastro realizado com sucesso!");
       navigate("/login");
-    } catch (error: any) {
-      console.error("Erro na requisição:", error.response);
+    } catch (error: unknown) {
+      const err = error as { response?: { status?: number; data?: { message?: unknown } } };
+      console.error("Erro na requisição:", err.response);
 
-      const status = error.response?.status;
-      const apiMessage = error.response?.data?.message;
+      const status = err.response?.status;
+      const apiMessage = err.response?.data?.message;
 
       if (
         status === 409 ||
