@@ -6,6 +6,11 @@ export interface Pendencia {
   dataConclusao?: string;
   colaboradorId: number;
   colaboradorNome?: string;
+  // Algumas APIs retornam o objeto aninhado em vez de campos "flat"
+  colaborador?: {
+    id: number;
+    nome: string;
+  };
 }
 
 export interface AlertaVencimento {
