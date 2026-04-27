@@ -1,17 +1,21 @@
 import axios from "axios";
 
-const defaultProd = "https://sistema-cadastro-rh-f16u.onrender.com";
-const defaultDev = "http://localhost:4000";
 const env = import.meta.env as unknown as {
     DEV?: boolean;
     VITE_API_BASE_URL?: string;
     VITE_API_URL?: string;
     VITE_API_BASE_URL_PROD?: string;
 };
-const baseURL =
-    env.VITE_API_BASE_URL ||
-    env.VITE_API_URL ||
-    (env.DEV ? defaultDev : (env.VITE_API_BASE_URL_PROD || defaultProd));
+
+// Se estiver em prod, tenta usar VITE_API_BASE_URL_PROD, depois VITE_API_BASE_URL, depois VITE_API_URL.
+// Se não encontrar nenhuma e estiver em DEV, usa o localhost:4000.
+// Caso contrário (estiver em prod e não tiver variável definida), vai falhar (ou podemos deixar vazio).
+// Deixei o localhost como último recurso caso as variáveis falhem em DEV.
+const defaultDev = "http://localhost:4000";
+
+const baseURL = env.DEV 
+    ? (env.VITE_API_BASE_URL || env.VITE_API_URL || defaultDev)
+    : (env.VITE_API_BASE_URL_PROD || env.VITE_API_BASE_URL || env.VITE_API_URL || "");
 
 const api = axios.create({
     baseURL,
