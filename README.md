@@ -55,10 +55,11 @@ Este frontend foi projetado para funcionar em conjunto com o **Colab+ Backend**,
 
 | Método | Endpoint           | Descrição               |
 | ------ | ------------------ | ----------------------- |
-| POST   | /login             | Autenticação de usuário |
+| POST   | /usuarios/logar    | Autenticação de usuário |
+| POST   | /usuarios/cadastrar| Cadastro de usuário     |
 | GET    | /colaboradores     | Lista colaboradores     |
 | POST   | /colaboradores     | Cadastra colaborador    |
-| PUT    | /colaboradores/:id | Atualiza colaborador    |
+| PUT    | /colaboradores     | Atualiza colaborador    |
 | GET    | /cargos            | Lista cargos            |
 | POST   | /cargos            | Cadastra cargo          |
 
@@ -113,11 +114,13 @@ yarn
 
 #### 3️⃣ Configure as variáveis de ambiente
 
-Crie um arquivo `.env` na raiz do projeto:
+Crie um arquivo `.env` na raiz do projeto (você pode copiar de `.env.example`):
 
 ```env
-VITE_API_URL=http://localhost:3000
+VITE_API_BASE_URL=http://localhost:4000
 ```
+
+> Dica: o projeto lê `VITE_API_BASE_URL` (recomendado). Também aceita `VITE_API_URL` por compatibilidade.
 
 #### 4️⃣ Execute a aplicação
 

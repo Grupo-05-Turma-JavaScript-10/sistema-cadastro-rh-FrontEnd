@@ -1,0 +1,169 @@
+import { useState } from "react";
+import { PlusIcon, FilterIcon, Download } from "lucide-react";
+import { Button } from "../components/ui/Button";
+import CollaboratorsTable from "../components/collaborators/CollaboratorsTable";
+import { SearchBar } from "../components/ui/SearchBar";
+import { PageHeader } from "../components/ui/PageHeader";
+import CollaboratorForm from "../components/collaborators/CollaboratorForm";
+import ConfirmDialog from "../components/ui/ConfirmDialog";
+import SalaryCalcDialog from "../components/collaborators/SalaryCalcDialog";
+import { useCollaborators } from "../hooks/useCollaborators";
+import { useCollaborator } from "../hooks/useCollaborator";
+import { deletarColaborador } from "../services/colaboradorService";
+import api from "../services/api";
+import type Worker from "../models/Worker";
+import { toast } from "react-toastify";
+import { PageTransition } from "../components/ui/PageTransition";
+import { Modal } from "../components/ui/Modal";
+
+export function Collaborators() {
+    const { data: collaborators, query, setQuery, refetch } = useCollaborators();
+    const [openForm, setOpenForm] = useState(false);
+    const [selectedId, setSelectedId] = useState<number | null>(null);
+    const { save } = useCollaborator(selectedId ?? undefined);
+    const [openDelete, setOpenDelete] = useState(false);
+    const [openCalc, setOpenCalc] = useState(false);
+
+    function handleNewCollaborator() {
+        setSelectedId(null);
+        setOpenForm(true);
+    }
+
+    async function handleSave(payload: Worker) {
+        try {
+            await save(payload);
+            setOpenForm(false);
+            refetch();
+            toast.success("Colaborador salvo com sucesso!");
+        } catch (err: unknown) {
+            const error = err as { message?: string };
+            toast.error(error?.message || "Falha ao salvar colaborador. Verifique os dados obrigatórios.");
+        }
+    }
+
+    function handleEdit(worker: Worker) {
+        setSelectedId(worker.id);
+        setOpenForm(true);
+    }
+
+    async function handleDeleteConfirm() {
+        if (selectedId == null) return;
+        await deletarColaborador(selectedId);
+        setOpenDelete(false);
+        refetch();
+        toast.success("Colaborador excluído!");
+    }
+
+    function handleDelete(worker: Worker) {
+        setSelectedId(worker.id);
+        setOpenDelete(true);
+    }
+
+    async function handleExportCSV() {
+        try {
+            const response = await api.get('/colaboradores/exportar/csv', {
+                responseType: 'blob' // Importante para lidar com o arquivo retornado
+            });
+            
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'colaboradores.csv';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            toast.success("Exportação concluída!");
+        } catch (error: unknown) {
+            const err = error as { message?: string; response?: { status?: number } };
+            console.error("Erro ao exportar:", err);
+            if (err.response?.status === 401 || err.response?.status === 403) {
+                toast.error("Não autorizado. Faça login novamente.");
+            } else {
+                toast.error(err.message || "Não foi possível exportar os dados.");
+            }
+        }
+    }
+
+
+    return (
+        <PageTransition>
+            <div className="space-y-6">
+
+                <PageHeader
+                    title="Colaboradores"
+                    subtitle="Gerencie os colaboradores da empresa"
+                >
+                    <div className="flex items-center gap-3">
+                        <Button variant="outline" onClick={handleExportCSV}>
+                            <Download size={20} />
+                            Exportar CSV
+                        </Button>
+                        <Button onClick={handleNewCollaborator}>
+                            <PlusIcon size={20} />
+                            Novo Colaborador
+                        </Button>
+                    </div>
+                </PageHeader>
+
+                <div className="flex flex-col md:flex-row gap-4 mb-6">
+
+                    <div className="flex-1">
+                        <SearchBar
+                            placeholder="Buscar por nome, cargo ou departamento..."
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                            className="w-full"
+                        />
+                    </div>
+
+                    <button className="flex items-center justify-center gap-2 px-4 py-4 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors font-medium text-sm h-full md:w-auto w-full">
+                        <FilterIcon size={18} />
+                        Filtros
+                    </button>
+
+                </div>
+
+
+                <CollaboratorsTable
+                    workers={collaborators}
+                    onEdit={handleEdit}
+                    onDelete={(worker) => handleDelete(worker)}
+                    onCalculate={(worker) => {
+                        setSelectedId(worker.id);
+                        setOpenCalc(true);
+                    }}
+                />
+
+
+                <ConfirmDialog
+                    open={openDelete}
+                    title="Excluir colaborador"
+                    description="Essa ação não pode ser desfeita."
+                    onConfirm={handleDeleteConfirm}
+                    onClose={() => setOpenDelete(false)}
+                />
+
+                <SalaryCalcDialog
+                    open={openCalc}
+                    onClose={() => setOpenCalc(false)}
+                    worker={selectedId ? (collaborators.find(w => w.id === selectedId) ?? null) : null}
+
+                />
+
+
+                <Modal
+                    isOpen={openForm}
+                    onClose={() => setOpenForm(false)}
+                    title={selectedId ? "Editar Colaborador" : "Novo Colaborador"}
+                >
+                    <CollaboratorForm
+                        initial={selectedId ? (collaborators.find(w => w.id === selectedId) ?? null) : null}
+                        onSubmit={handleSave}
+                        onCancel={() => setOpenForm(false)}
+                    />
+                </Modal>
+
+            </div>
+        </PageTransition>
+    );
+}
